@@ -17,3 +17,9 @@ The API key can be specified in a .env file which can be stored at 00_src/.env a
 OPENAI_API_KEY = <YOUR_API_KEY>
 OPENAI_API_BASE_URL = <YOUR_API_URL>
 ```
+
+Install requirements for python enviroment:
+
+```console
+>conda create --name <ENVNAME> --file requirements.txt
+```
