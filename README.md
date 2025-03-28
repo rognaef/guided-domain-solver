@@ -21,5 +21,5 @@ OPENAI_API_BASE_URL = <YOUR_API_URL>
 Install requirements for python enviroment:
 
 ```console
->conda create --name <ENVNAME> --file requirements.txt
+>pip install -r requirements.txt
 ```
