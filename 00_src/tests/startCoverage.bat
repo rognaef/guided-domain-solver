@@ -1,6 +1,8 @@
 @echo off
-CALL ..\..\.\venv\Scripts\activate.bat
+cd..
 
-::pytest tests/ --cov -p no:warnings
-pytest tests/ --cov -p no:warnings > coverage.txt
+CALL ..\venv\Scripts\activate.bat
+
+python -m  pytest --cov-config=tests/.coveragerc --cov -p no:warnings > tests/coverage.txt
+
 del .coverage
