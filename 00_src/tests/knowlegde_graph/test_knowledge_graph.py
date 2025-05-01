@@ -36,3 +36,16 @@ def test_static_layer():
                                 """,
                                 limit = 25)
     assert len(records) == 9
+
+def test_dynamic_layer():
+    testee = KnowledgeGraph(env=env)
+    records, summary, keys = client.execute_query("""
+                                MATCH (n:Box) RETURN n LIMIT $limit
+                                """,
+                                limit = 25)
+    assert len(records) == 2
+    records, summary, keys = client.execute_query("""
+                                MATCH (n:Player) RETURN n LIMIT $limit
+                                """,
+                                limit = 25)
+    assert len(records) == 1
