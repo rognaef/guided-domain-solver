@@ -1,8 +1,8 @@
 import pytest
-from knowledge_graph.knowledge_graph_neo4j import KnowledgeGraphNeo4J
+from knowledge_graph.client_neo4j import Neo4jClient
 
 # set up
-testee = KnowledgeGraphNeo4J()
+testee = Neo4jClient()
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
