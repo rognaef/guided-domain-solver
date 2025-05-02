@@ -14,32 +14,32 @@ class Neo4jClient():
         self.uri = os.getenv("NEO4J_URI")
         self.auth = (os.getenv("NEO4J_USERNAME"), os.getenv("NEO4J_PASSWORD"))
         self.database = "neo4j"
+        self.driver = GraphDatabase.driver(self.uri, auth=self.auth)
+    
+    def __del__(self) -> None:
+        self.driver.close()
 
     def check_connectivity(self) -> None:
-        with GraphDatabase.driver(self.uri, auth=self.auth) as driver:
-            driver.verify_connectivity()
+        self.driver.verify_connectivity()
 
-    def write(self, cypher: str) -> None:
-        with GraphDatabase.driver(self.uri, auth=self.auth) as driver:
-            with driver.session(database=self.database) as session:
+    def write(self, *cyphers: str) -> None:
+        with self.driver.session(database=self.database) as session:
+            for cypher in cyphers:
                 session.execute_write(_execute_write_tx, cypher)
-                print("successful:", " ".join(cypher.split()))
+                print("successful write:", " ".join(cypher.split()))
 
     def read(self, cypher: str, **kwargs: any) -> tuple[any, any, any]:
-        with GraphDatabase.driver(self.uri, auth=self.auth) as driver:
-            records, summary, keys = driver.execute_query(
+        records, summary, keys = self.driver.execute_query(
             cypher,
             **kwargs,
-            database_=self.database,
-            )
-        print("successful:", " ".join(cypher.split()))
+            database_=self.database)
+        print("successful read:", " ".join(cypher.split()))
         return records, summary, keys
 
     def clear_db(self) -> None:
-        with GraphDatabase.driver(self.uri, auth=self.auth) as driver:
-            with driver.session(database=self.database) as session:
-                session.execute_write(_clear_db_tx)
-                print("cleared all nodes in " + self.database)
+        with self.driver.session(database=self.database) as session:
+            session.execute_write(_clear_db_tx)
+            print("cleared all nodes in " + self.database)
 
 def _execute_write_tx(tx, cypher: str) -> None:
     tx.run(cypher) 

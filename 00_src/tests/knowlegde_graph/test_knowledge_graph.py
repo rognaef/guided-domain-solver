@@ -28,19 +28,17 @@ class SokobanEnvFixated(SokobanEnv):
         starting_observation = self.render(render_mode)
         return starting_observation
 env = SokobanEnvFixated(dim_room=(5, 5), max_steps=40, num_boxes=2, num_gen_steps=None, reset=True)
-client = Neo4jClient()
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
     # Before each
-    # Do nothing
     yield
     # After each
     env.reset()
 
 def test_static_layer():
     testee = KnowledgeGraph(env=env)
-    records, summary, keys = client.read("""
+    records, summary, keys = testee.client.read("""
                                 MATCH (n:Floor) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
@@ -48,22 +46,22 @@ def test_static_layer():
 
 def test_dynamic_layer():
     testee = KnowledgeGraph(env=env)
-    records, summary, keys = client.read("""
+    records, summary, keys = testee.client.read("""
                                 MATCH (n:Box) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 2
-    records, summary, keys = client.read("""
+    records, summary, keys = testee.client.read("""
                                 MATCH (n:Player) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 1
-    records, summary, keys =  client.read("""
+    records, summary, keys =  testee.client.read("""
                                 MATCH () -[r:SHOULD_GO_TO] -> () RETURN r LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 2
-    records, summary, keys =  client.read("""
+    records, summary, keys =  testee.client.read("""
                                 MATCH (n:Action) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
@@ -73,14 +71,14 @@ def test_update():
     testee = KnowledgeGraph(env=env)
     env.step(UP)
     testee.update()
-    records, summary, keys =  client.read("""
+    records, summary, keys =  testee.client.read("""
                                 MATCH (n:Action) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 3
     env.step(LEFT)
     testee.update()
-    records, summary, keys =  client.read("""
+    records, summary, keys =  testee.client.read("""
                                 MATCH (n:Action) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
