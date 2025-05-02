@@ -6,6 +6,11 @@ BOX_TARGET = 2
 BOX_ON_TARGET = 3
 BOX = 4
 PLAYER = 5
+ACTIONS = [(1, 0, -1, "Up"), (2, 0, 1, "Down"), (3, -1, 0, "Left"), (4, 1, 0, "Right")] #(action_id, dx, dy, tag)
+
+find_player = lambda room_state: next((x, y) for y, row in enumerate(room_state) for x, val in enumerate(row) if val == PLAYER)
+in_bound = lambda array, n: n >= 0 and n < len(array)
+pos_in_bound = lambda room_state, x, y: in_bound(room_state, y) and in_bound(room_state[0], x)
 
 class KnowledgeGraph():
     client : Neo4jClient
@@ -76,11 +81,34 @@ class KnowledgeGraph():
                                     CREATE (b)-[:ON_TOP_OF]->(f);
                                 """)
         
-        # create relationsships for box targets
+        # create relationships for box targets
         targets = []
         for target_position, box_position in self.env.box_mapping.items():
             targets.append("(b.x = {box_x} AND b.y = {box_y} AND f.x = {tar_x} AND f.y = {tar_y})".format(tar_x=target_position[1], tar_y=target_position[0], box_x=box_position[1], box_y=box_position[0]))
         cypher = "MATCH (b:Box),(f:Floor) WHERE " + " OR ".join(targets) + " CREATE (b)-[:SHOULD_GO_TO]->(f);"
         self.client.execute_write(cypher)
+
+        self._createActions()
+    
+    def _createActions(self) -> None:
+        # create nodes for the actions
+        nodes =[]
+        player_pos = find_player(self.env.room_state)
+        for action in ACTIONS:
+            dx, dy = action[1], action[2]
+            player_x, player_y = player_pos[0] + dx, player_pos[0] + dy
+            box_x, box_y = player_x + dx, player_y + dy
+            can_move = pos_in_bound(self.env.room_state, player_x, player_y) and self.env.room_state[player_y, player_x] in [FLOOR, BOX_TARGET]
+            can_push_box = self.env.room_state[player_y, player_x] in [BOX_ON_TARGET, BOX] and pos_in_bound(self.env.room_state, box_x, box_y) and self.env.room_state[box_y, box_x] in [FLOOR, BOX_TARGET]
+            if can_move or can_push_box:
+                nodes.append("(:Action {{id: {id}, dx:{dx}, dy:{dy}, tag:\"{tag}\"}})".format(id=action[0], dx=dx, dy=dy, tag=action[3]))
+        cypher = "CREATE " + ",".join(nodes) + ";"
+        self.client.execute_write(cypher)
+
+        # create relationships from player to actions
+        self.client.execute_write("""
+                                    MATCH (p:Player),(a:Action)
+                                    CREATE (p)-[:CAN_MOVE]->(a);
+                                """)
 
     
