@@ -75,5 +75,12 @@ class KnowledgeGraph():
                                         WHERE b.x = f.x AND b.y = f.y
                                     CREATE (b)-[:ON_TOP_OF]->(f);
                                 """)
+        
+        # create relationsships for box targets
+        targets = []
+        for target_position, box_position in self.env.box_mapping.items():
+            targets.append("(b.x = {box_x} AND b.y = {box_y} AND f.x = {tar_x} AND f.y = {tar_y})".format(tar_x=target_position[1], tar_y=target_position[0], box_x=box_position[1], box_y=box_position[0]))
+        cypher = "MATCH (b:Box),(f:Floor) WHERE " + " OR ".join(targets) + " CREATE (b)-[:SHOULD_GO_TO]->(f);"
+        self.client.execute_write(cypher)
 
     

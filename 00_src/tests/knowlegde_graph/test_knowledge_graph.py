@@ -49,3 +49,8 @@ def test_dynamic_layer():
                                 """,
                                 limit = 25)
     assert len(records) == 1
+    records, summary, keys =  client.execute_query("""
+                                MATCH () -[r:SHOULD_GO_TO] -> () RETURN r LIMIT $limit
+                                """,
+                                limit = 25)
+    assert len(records) == 2
