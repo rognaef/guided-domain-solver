@@ -67,7 +67,18 @@ class KnowledgeGraph():
                     player_id+=1
         cypher = "CREATE " + ",".join(nodes) + ";"
         self.client.execute_write(cypher)
+        
+        # create relationships for box targets
+        targets = []
+        for target_position, box_position in self.env.box_mapping.items():
+            targets.append("(b.x = {box_x} AND b.y = {box_y} AND f.x = {tar_x} AND f.y = {tar_y})".format(tar_x=target_position[1], tar_y=target_position[0], box_x=box_position[1], box_y=box_position[0]))
+        cypher = "MATCH (b:Box),(f:Floor) WHERE " + " OR ".join(targets) + " CREATE (b)-[:SHOULD_GO_TO]->(f);"
+        self.client.execute_write(cypher)
 
+        self._create_position_relationshpis()
+        self._create_action_nodes()
+    
+    def _create_position_relationshpis(self):
         # create relationships from boxes and player to the floor
         self.client.execute_write("""
                                     MATCH (p:Player),(f:Floor)
@@ -80,23 +91,19 @@ class KnowledgeGraph():
                                         WHERE b.x = f.x AND b.y = f.y
                                     CREATE (b)-[:ON_TOP_OF]->(f);
                                 """)
-        
-        # create relationships for box targets
-        targets = []
-        for target_position, box_position in self.env.box_mapping.items():
-            targets.append("(b.x = {box_x} AND b.y = {box_y} AND f.x = {tar_x} AND f.y = {tar_y})".format(tar_x=target_position[1], tar_y=target_position[0], box_x=box_position[1], box_y=box_position[0]))
-        cypher = "MATCH (b:Box),(f:Floor) WHERE " + " OR ".join(targets) + " CREATE (b)-[:SHOULD_GO_TO]->(f);"
-        self.client.execute_write(cypher)
-
-        self._createActions()
     
-    def _createActions(self) -> None:
+    def _clear_position_relationshpis(self):
+        self.client.execute_write("""
+                                    MATCH () -[r:ON_TOP_OF] -> () DELETE r
+                                """)
+    
+    def _create_action_nodes(self) -> None:
         # create nodes for the actions
         nodes =[]
         player_pos = find_player(self.env.room_state)
         for action in ACTIONS:
             dx, dy = action[1], action[2]
-            player_x, player_y = player_pos[0] + dx, player_pos[0] + dy
+            player_x, player_y = player_pos[0] + dx, player_pos[1] + dy
             box_x, box_y = player_x + dx, player_y + dy
             can_move = pos_in_bound(self.env.room_state, player_x, player_y) and self.env.room_state[player_y, player_x] in [FLOOR, BOX_TARGET]
             can_push_box = self.env.room_state[player_y, player_x] in [BOX_ON_TARGET, BOX] and pos_in_bound(self.env.room_state, box_x, box_y) and self.env.room_state[box_y, box_x] in [FLOOR, BOX_TARGET]
@@ -110,5 +117,19 @@ class KnowledgeGraph():
                                     MATCH (p:Player),(a:Action)
                                     CREATE (p)-[:CAN_MOVE]->(a);
                                 """)
+    
+    def _clear_action_nodes(self) -> None:
+        self.client.execute_write("""
+                                    MATCH () -[r:CAN_MOVE] -> () DELETE r
+                                """)
+        self.client.execute_write("""
+                                    MATCH (a:Action) DELETE a
+                                """)
+    
+    def update(self) -> None:
+        self._clear_position_relationshpis()
+        self._clear_action_nodes()
+        self._create_position_relationshpis()
+        self._create_action_nodes()
 
     

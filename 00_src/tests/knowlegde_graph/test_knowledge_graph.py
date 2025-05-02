@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 from gym_sokoban.envs import SokobanEnv
 from knowledge_graph.knowledge_graph import KnowledgeGraph
@@ -29,6 +30,14 @@ class SokobanEnvFixated(SokobanEnv):
 env = SokobanEnvFixated(dim_room=(5, 5), max_steps=40, num_boxes=2, num_gen_steps=None, reset=True)
 client = Neo4jClient()
 
+@pytest.fixture(autouse=True)
+def run_around_tests():
+    # Before each
+    # Do nothing
+    yield
+    # After each
+    env.reset()
+
 def test_static_layer():
     testee = KnowledgeGraph(env=env)
     records, summary, keys = client.execute_query("""
@@ -59,3 +68,13 @@ def test_dynamic_layer():
                                 """,
                                 limit = 25)
     assert len(records) == 2
+
+def test_update():
+    testee = KnowledgeGraph(env=env)
+    env.step(1) #UP
+    testee.update()
+    records, summary, keys =  client.execute_query("""
+                                MATCH (n:Action) RETURN n LIMIT $limit
+                                """,
+                                limit = 25)
+    assert len(records) == 3
