@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from gym_sokoban.envs import SokobanEnv
-from knowledge_graph.knowledge_graph import KnowledgeGraph
+from knowledge_graph.knowledge_graph import KnowledgeGraph, UP, LEFT
 from knowledge_graph.client_neo4j import Neo4jClient
 
 # set up
@@ -40,7 +40,7 @@ def run_around_tests():
 
 def test_static_layer():
     testee = KnowledgeGraph(env=env)
-    records, summary, keys = client.execute_query("""
+    records, summary, keys = client.read("""
                                 MATCH (n:Floor) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
@@ -48,22 +48,22 @@ def test_static_layer():
 
 def test_dynamic_layer():
     testee = KnowledgeGraph(env=env)
-    records, summary, keys = client.execute_query("""
+    records, summary, keys = client.read("""
                                 MATCH (n:Box) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 2
-    records, summary, keys = client.execute_query("""
+    records, summary, keys = client.read("""
                                 MATCH (n:Player) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 1
-    records, summary, keys =  client.execute_query("""
+    records, summary, keys =  client.read("""
                                 MATCH () -[r:SHOULD_GO_TO] -> () RETURN r LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 2
-    records, summary, keys =  client.execute_query("""
+    records, summary, keys =  client.read("""
                                 MATCH (n:Action) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
@@ -71,10 +71,17 @@ def test_dynamic_layer():
 
 def test_update():
     testee = KnowledgeGraph(env=env)
-    env.step(1) #UP
+    env.step(UP)
     testee.update()
-    records, summary, keys =  client.execute_query("""
+    records, summary, keys =  client.read("""
                                 MATCH (n:Action) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 3
+    env.step(LEFT)
+    testee.update()
+    records, summary, keys =  client.read("""
+                                MATCH (n:Action) RETURN n LIMIT $limit
+                                """,
+                                limit = 25)
+    assert len(records) == 2

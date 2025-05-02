@@ -16,28 +16,28 @@ def test_check_connectivity():
     testee.check_connectivity()
 
 def test_execute_write():
-    testee.execute_write("""
+    testee.write("""
     CREATE (a:TestNode { Tag : "This is a test" })
     """)
 
 def test_execute_query():
-    testee.execute_write("""
+    testee.write("""
     CREATE (a:TestNode { Tag : "This is a test" })
     """)
-    records, summary, keys = testee.execute_query("""
+    records, summary, keys = testee.read("""
                                 MATCH (n:TestNode) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 1
 
 def test_clear_db():
-    testee.execute_write("""
+    testee.write("""
     CREATE (a:TestNode { Tag : "This is a test" })
     """)
 
     testee.clear_db()
 
-    records, summary, keys = testee.execute_query("""
+    records, summary, keys = testee.read("""
                                 MATCH (n:TestNode) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)

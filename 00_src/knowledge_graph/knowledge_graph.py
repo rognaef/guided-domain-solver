@@ -1,14 +1,12 @@
 from knowledge_graph.client_neo4j import Neo4jClient
 from gym_sokoban.envs import SokobanEnv
 
-FLOOR = 1
-BOX_TARGET = 2
-BOX_ON_TARGET = 3
-BOX = 4
-PLAYER = 5
-ACTIONS = [(1, 0, -1, "Up"), (2, 0, 1, "Down"), (3, -1, 0, "Left"), (4, 1, 0, "Right")] #(action_id, dx, dy, tag)
+FLOOR, BOX_TARGET, BOX_ON_TARGET, BOX, PLAYER = 1, 2, 3, 4, 5
+UP, DOWN, LEFT, RIGHT = 1, 2, 3, 4
+ACTIONS = [(UP, 0, -1, "Up"), (DOWN, 0, 1, "Down"), (LEFT, -1, 0, "Left"), (RIGHT, 1, 0, "Right")] #(action_id, dx, dy, tag)
 
 find_player = lambda room_state: next((x, y) for y, row in enumerate(room_state) for x, val in enumerate(row) if val == PLAYER)
+find_boxes = lambda room_state: [(x, y) for y, row in enumerate(room_state) for x, val in enumerate(row) if val == BOX_ON_TARGET or val == BOX]
 in_bound = lambda array, n: n >= 0 and n < len(array)
 pos_in_bound = lambda room_state, x, y: in_bound(room_state, y) and in_bound(room_state[0], x)
 
@@ -36,10 +34,10 @@ class KnowledgeGraph():
                     nodes.append("(:Floor {{id: {id}, x:{x}, y:{y}, has_box_target:{has_box_target}, tag:\"{tag}\"}})".format(id=id, x=x, y=y, has_box_target=has_box_target, tag=tag))
                     id+=1
         cypher = "CREATE " + ",".join(nodes) + ";"
-        self.client.execute_write(cypher)
+        self.client.write(cypher)
 
         # create relationships for neighbouring tiles
-        self.client.execute_write("""
+        self.client.write("""
                                     MATCH (o1:Floor),(o2:Floor)
                                       WHERE (o1.x = o2.x AND o1.y = o2.y-1)
                                          OR (o1.x = o2.x AND o1.y = o2.y+1)
@@ -66,34 +64,34 @@ class KnowledgeGraph():
                     nodes.append("(:Player {{id: {id}, x:{x}, y:{y}, tag:\"{tag}\"}})".format(id=player_id, x=x, y=y, tag=tag))
                     player_id+=1
         cypher = "CREATE " + ",".join(nodes) + ";"
-        self.client.execute_write(cypher)
+        self.client.write(cypher)
         
         # create relationships for box targets
         targets = []
         for target_position, box_position in self.env.box_mapping.items():
             targets.append("(b.x = {box_x} AND b.y = {box_y} AND f.x = {tar_x} AND f.y = {tar_y})".format(tar_x=target_position[1], tar_y=target_position[0], box_x=box_position[1], box_y=box_position[0]))
         cypher = "MATCH (b:Box),(f:Floor) WHERE " + " OR ".join(targets) + " CREATE (b)-[:SHOULD_GO_TO]->(f);"
-        self.client.execute_write(cypher)
+        self.client.write(cypher)
 
         self._create_position_relationshpis()
         self._create_action_nodes()
     
     def _create_position_relationshpis(self):
         # create relationships from boxes and player to the floor
-        self.client.execute_write("""
+        self.client.write("""
                                     MATCH (p:Player),(f:Floor)
                                         WHERE p.x = f.x AND p.y = f.y
                                     CREATE (p)-[:ON_TOP_OF]->(f);
                                 """)
 
-        self.client.execute_write("""
+        self.client.write("""
                                     MATCH (b:Box),(f:Floor)
                                         WHERE b.x = f.x AND b.y = f.y
                                     CREATE (b)-[:ON_TOP_OF]->(f);
                                 """)
     
-    def _clear_position_relationshpis(self):
-        self.client.execute_write("""
+    def _clear_position_relationships(self):
+        self.client.write("""
                                     MATCH () -[r:ON_TOP_OF] -> () DELETE r
                                 """)
     
@@ -110,26 +108,50 @@ class KnowledgeGraph():
             if can_move or can_push_box:
                 nodes.append("(:Action {{id: {id}, dx:{dx}, dy:{dy}, tag:\"{tag}\"}})".format(id=action[0], dx=dx, dy=dy, tag=action[3]))
         cypher = "CREATE " + ",".join(nodes) + ";"
-        self.client.execute_write(cypher)
+        self.client.write(cypher)
 
         # create relationships from player to actions
-        self.client.execute_write("""
+        self.client.write("""
                                     MATCH (p:Player),(a:Action)
                                     CREATE (p)-[:CAN_MOVE]->(a);
                                 """)
     
     def _clear_action_nodes(self) -> None:
-        self.client.execute_write("""
+        self.client.write("""
                                     MATCH () -[r:CAN_MOVE] -> () DELETE r
                                 """)
-        self.client.execute_write("""
+        self.client.write("""
                                     MATCH (a:Action) DELETE a
                                 """)
     
     def update(self) -> None:
-        self._clear_position_relationshpis()
+        self._clear_position_relationships()
         self._clear_action_nodes()
+        self._update_player_position()
+        self._update_box_positions()
         self._create_position_relationshpis()
         self._create_action_nodes()
+
+    def _update_player_position(self) -> None:
+        player_pos = find_player(self.env.room_state)
+        self.client.write("MATCH (p:Player {{id: {id}}}) SET p += {{x: {x}, y: {y}}} RETURN p".format(id=1, x=player_pos[0], y=player_pos[1]))
+
+    def _update_box_positions(self) -> None:
+        boxes = find_boxes(self.env.room_state)
+        updatable_boxes = []
+        records, summary, keys = self.client.read("""
+                                MATCH (b:Box) RETURN b
+                                """)
+        for record in records:
+            box_pos = (record["b"].get('x'), record["b"].get('y'))
+            if box_pos in boxes:
+                boxes.remove(box_pos)
+            else:
+                updatable_boxes.append(record)
+        for update_record in updatable_boxes:
+            id = update_record["b"].get('id')
+            box_pos = boxes[0]
+            self.client.write("MATCH (b:Box {{id: {id}}}) SET b += {{x: {x}, y: {y}}} RETURN b".format(id=id, x=box_pos[0], y=box_pos[1]))
+            boxes.remove(box_pos)
 
     

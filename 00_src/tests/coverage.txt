@@ -12,8 +12,8 @@ _______________ coverage: platform win32, python 3.10.0-final-0 _______________
 
 Name                                 Stmts   Miss  Cover
 --------------------------------------------------------
-knowledge_graph\client_neo4j.py         35      0   100%
-knowledge_graph\knowledge_graph.py      86      0   100%
+knowledge_graph\client_neo4j.py         36      0   100%
+knowledge_graph\knowledge_graph.py     103      0   100%
 --------------------------------------------------------
-TOTAL                                  121      0   100%
-======================== 7 passed in 213.38s (0:03:33) ========================
+TOTAL                                  139      0   100%
+======================== 7 passed in 267.83s (0:04:27) ========================

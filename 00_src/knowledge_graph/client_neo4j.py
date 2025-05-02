@@ -19,19 +19,20 @@ class Neo4jClient():
         with GraphDatabase.driver(self.uri, auth=self.auth) as driver:
             driver.verify_connectivity()
 
-    def execute_write(self, cypher: str) -> None:
+    def write(self, cypher: str) -> None:
         with GraphDatabase.driver(self.uri, auth=self.auth) as driver:
             with driver.session(database=self.database) as session:
                 session.execute_write(_execute_write_tx, cypher)
-                print("successful")
+                print("successful:", " ".join(cypher.split()))
 
-    def execute_query(self, query: str, **kwargs: any) -> tuple[any, any, any]:
+    def read(self, cypher: str, **kwargs: any) -> tuple[any, any, any]:
         with GraphDatabase.driver(self.uri, auth=self.auth) as driver:
             records, summary, keys = driver.execute_query(
-            query,
+            cypher,
             **kwargs,
             database_=self.database,
             )
+        print("successful:", " ".join(cypher.split()))
         return records, summary, keys
 
     def clear_db(self) -> None:
