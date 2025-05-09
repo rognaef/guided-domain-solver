@@ -1,14 +1,7 @@
 from knowledge_graph.client_neo4j import Neo4jClient
+from environment.const import *
+from environment.util import *
 from gym_sokoban.envs import SokobanEnv
-
-FLOOR, BOX_TARGET, BOX_ON_TARGET, BOX, PLAYER = 1, 2, 3, 4, 5
-UP, DOWN, LEFT, RIGHT = 1, 2, 3, 4
-ACTIONS = [(UP, 0, -1, "Up"), (DOWN, 0, 1, "Down"), (LEFT, -1, 0, "Left"), (RIGHT, 1, 0, "Right")] #(action_id, dx, dy, tag)
-
-find_player = lambda room_state: next((x, y) for y, row in enumerate(room_state) for x, val in enumerate(row) if val == PLAYER)
-find_boxes = lambda room_state: [(x, y) for y, row in enumerate(room_state) for x, val in enumerate(row) if val == BOX_ON_TARGET or val == BOX]
-in_bound = lambda array, n: n >= 0 and n < len(array)
-pos_in_bound = lambda room_state, x, y: in_bound(room_state, y) and in_bound(room_state[0], x)
 
 class KnowledgeGraph():
     client : Neo4jClient
@@ -98,15 +91,14 @@ class KnowledgeGraph():
     def _create_action_nodes(self) -> None:
         # create nodes for the actions
         nodes =[]
-        player_pos = find_player(self.env.room_state)
-        for action in ACTIONS:
-            dx, dy = action[1], action[2]
+        player_pos = find_player(self.env)
+        for id, dx, dy, tag  in ACTIONS:
             player_x, player_y = player_pos[0] + dx, player_pos[1] + dy
             box_x, box_y = player_x + dx, player_y + dy
-            can_move = pos_in_bound(self.env.room_state, player_x, player_y) and self.env.room_state[player_y, player_x] in [FLOOR, BOX_TARGET]
-            can_push_box = self.env.room_state[player_y, player_x] in [BOX_ON_TARGET, BOX] and pos_in_bound(self.env.room_state, box_x, box_y) and self.env.room_state[box_y, box_x] in [FLOOR, BOX_TARGET]
+            can_move = pos_in_bound(self.env, player_x, player_y) and self.env.room_state[player_y, player_x] in [FLOOR, BOX_TARGET]
+            can_push_box = self.env.room_state[player_y, player_x] in [BOX_ON_TARGET, BOX] and pos_in_bound(self.env, box_x, box_y) and self.env.room_state[box_y, box_x] in [FLOOR, BOX_TARGET]
             if can_move or can_push_box:
-                nodes.append("(:Action {{id: {id}, dx:{dx}, dy:{dy}, tag:\"{tag}\"}})".format(id=action[0], dx=dx, dy=dy, tag=action[3]))
+                nodes.append("(:Action {{id: {id}, dx:{dx}, dy:{dy}, tag:\"{tag}\"}})".format(id=id, dx=dx, dy=dy, tag=tag))
         cypher = "CREATE " + ",".join(nodes) + ";"
         self.client.write(cypher)
 
@@ -133,11 +125,11 @@ class KnowledgeGraph():
         self._create_action_nodes()
 
     def _update_player_position(self) -> None:
-        player_pos = find_player(self.env.room_state)
+        player_pos = find_player(self.env)
         self.client.write("MATCH (p:Player {{id: {id}}}) SET p += {{x: {x}, y: {y}}} RETURN p".format(id=1, x=player_pos[0], y=player_pos[1]))
 
     def _update_box_positions(self) -> None:
-        boxes = find_boxes(self.env.room_state)
+        boxes = find_boxes(self.env)
         updatable_boxes = []
         records, summary, keys = self.client.read("""
                                 MATCH (b:Box) RETURN b
