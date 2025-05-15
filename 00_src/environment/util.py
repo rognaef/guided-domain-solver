@@ -14,6 +14,12 @@ in_bound = lambda array, n: n >= 0 and n < len(array)
 pos_in_bound = lambda env, x, y: in_bound(env.room_state, y) and in_bound(env.room_state[0], x)
 
 def breadth_first_search(env: SokobanEnvImpl) -> list:
+    """
+    Seraches the optimal path with a bredth first search in the given enviroment
+
+    Args:
+        env: The Sokoban environment.
+    """
     # Find initial player position and boxes
     player_pos = find_player(env)
     boxes = find_boxes(env)
