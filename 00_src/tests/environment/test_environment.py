@@ -37,3 +37,9 @@ def test_fixated_environment():
     assert find_player(testee) == (5,4)
     testee.reset()
     assert find_player(testee) == (4,4)
+
+def test_as_fixated():
+    testee = SokobanEnvImpl(dim_room=(8, 8), max_steps=120, num_boxes=2)
+    fixated = testee.as_fixated()
+    assert testee.fixated_env is None
+    assert fixated.fixated_env is not None

@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 from gym_sokoban.envs import SokobanEnv
 from gym.spaces.discrete import Discrete
@@ -53,3 +54,8 @@ class SokobanEnvImpl(SokobanEnv):
 
         starting_observation = self.render(render_mode)
         return starting_observation # Close environment after testing
+    
+    def as_fixated(self) -> SokobanEnv:
+        env = copy.deepcopy(self)
+        env.fixated_env = (self.room_fixed, self.room_state, self.box_mapping)
+        return env

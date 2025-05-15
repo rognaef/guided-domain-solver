@@ -18,6 +18,7 @@ def render(env: SokobanEnvImpl, path=None, dpi=300, save_fig=None, show_fig=True
         save_fig: Saves the plot in the given path.
         show_fig: Shows the figure
     """
+    env = env.as_fixated()
     image = env.render("rgb_array")
 
     plt.figure(dpi=dpi)
@@ -123,6 +124,7 @@ def animate(env:SokobanEnvImpl, path:list[int], save_ani:str, draw_arrows=True, 
         draw_arrows: Draws arrows of the trajectory.
         dpi : float, default: :rc:`figure.dpi` The resolution of the figure in dots-per-inch.
     """
+    env = env.as_fixated()
     fig = plt.figure(figsize=(5, 5), dpi=dpi, frameon=False)
     ax = plt.Axes(fig, [0., 0., 1., 1.]) 
     ax.set_axis_off()
@@ -137,7 +139,7 @@ def animate(env:SokobanEnvImpl, path:list[int], save_ani:str, draw_arrows=True, 
 
     plt.close()
 
-def _animate(frame, env, path, im, fig, draw_arrows=False):
+def _animate(frame:int, env:SokobanEnvImpl, path:list[int], im:mpimg.AxesImage, fig:plt.Figure, draw_arrows=False) -> mpimg.AxesImage:
     if frame==0:
         env.reset()
     else:
@@ -146,7 +148,7 @@ def _animate(frame, env, path, im, fig, draw_arrows=False):
     im.set_array(env.render("rgb_array"))
     return [im]
 
-def _take_step(env, path, step, fig, draw_arrows):
+def _take_step(env:SokobanEnvImpl, path:list[int], step:int, fig:plt.Figure, draw_arrows:bool) -> None:
     if not draw_arrows:
         env.step(path[step])
         return
