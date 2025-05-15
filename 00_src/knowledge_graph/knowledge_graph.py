@@ -146,4 +146,8 @@ class KnowledgeGraph():
             self.client.write("MATCH (b:Box {{id: {id}}}) SET b += {{x: {x}, y: {y}}} RETURN b".format(id=id, x=box_pos[0], y=box_pos[1]))
             boxes.remove(box_pos)
 
+    def get_possible_actions(self) -> list[int]:
+        records, summary, keys =  self.client.read("MATCH (a:Action) RETURN a")
+        return [record["a"].get("id") for record in records]
+
     

@@ -83,3 +83,10 @@ def test_update():
                                 """,
                                 limit = 25)
     assert len(records) == 2
+
+def test_get_possible_actions():
+    testee = KnowledgeGraph(env=env)
+    possible_actions = testee.get_possible_actions()
+    assert len(possible_actions) == 2
+    assert possible_actions[0] == UP
+    assert possible_actions[1] == LEFT

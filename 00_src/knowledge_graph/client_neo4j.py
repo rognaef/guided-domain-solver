@@ -2,6 +2,9 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from neo4j import GraphDatabase
+import logging
+
+LOGGER = "Neo4jClient"
 
 class Neo4jClient():
     uri : str
@@ -26,20 +29,20 @@ class Neo4jClient():
         with self.driver.session(database=self.database) as session:
             for cypher in cyphers:
                 session.execute_write(_execute_write_tx, cypher)
-                print("successful write:", " ".join(cypher.split()))
+                logging.getLogger(LOGGER).info("successful write:{cypher}".format(cypher=" ".join(cypher.split())))
 
     def read(self, cypher: str, **kwargs: any) -> tuple[any, any, any]:
         records, summary, keys = self.driver.execute_query(
             cypher,
             **kwargs,
             database_=self.database)
-        print("successful read:", " ".join(cypher.split()))
+        logging.getLogger(LOGGER).info("successful read: {cypher}".format(cypher=" ".join(cypher.split())))
         return records, summary, keys
 
     def clear_db(self) -> None:
         with self.driver.session(database=self.database) as session:
             session.execute_write(_clear_db_tx)
-            print("cleared all nodes in " + self.database)
+            logging.getLogger(LOGGER).info("cleared all nodes in " + self.database)
 
 def _execute_write_tx(tx, cypher: str) -> None:
     tx.run(cypher) 

@@ -2,14 +2,14 @@
 platform win32 -- Python 3.10.14, pytest-8.3.5, pluggy-1.5.0
 rootdir: C:\Users\roger.naef\Documents\vm-code-generation-with-knowledge-graph\00_src
 plugins: anyio-4.9.0, langsmith-0.3.42, cov-6.1.1
-collected 21 items
+collected 23 items
 
-tests\agents\test_agent_ollama.py ..                                     [  9%]
-tests\environment\test_environment.py ..                                 [ 19%]
+tests\agents\test_agent_ollama.py ..                                     [  8%]
+tests\environment\test_environment.py ...                                [ 21%]
 tests\environment\test_util.py ......                                    [ 47%]
-tests\environment\test_visualization.py ....                             [ 66%]
-tests\knowlegde_graph\test_client_neo4j.py ....                          [ 85%]
-tests\knowlegde_graph\test_knowledge_graph.py ...                        [100%]
+tests\environment\test_visualization.py ....                             [ 65%]
+tests\knowlegde_graph\test_client_neo4j.py ....                          [ 82%]
+tests\knowlegde_graph\test_knowledge_graph.py ....                       [100%]
 
 =============================== tests coverage ================================
 ______________ coverage: platform win32, python 3.10.14-final-0 _______________
@@ -18,11 +18,11 @@ Name                                 Stmts   Miss  Cover
 --------------------------------------------------------
 agents\agent_ollama.py                  15      0   100%
 environment\const.py                     3      0   100%
-environment\environment.py              25      0   100%
+environment\environment.py              30      0   100%
 environment\util.py                     47      0   100%
-environment\visualization.py           136      1    99%
+environment\visualization.py           138      1    99%
 knowledge_graph\client_neo4j.py         36      0   100%
-knowledge_graph\knowledge_graph.py      97      0   100%
+knowledge_graph\knowledge_graph.py     100      0   100%
 --------------------------------------------------------
-TOTAL                                  359      1    99%
-======================== 21 passed in 62.15s (0:01:02) ========================
+TOTAL                                  369      1    99%
+======================== 23 passed in 74.25s (0:01:14) ========================
