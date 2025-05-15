@@ -70,3 +70,12 @@ def test_breadth_first_search_unsolvable():
         {(6, 7): (5, 7), (5, 4): (5, 5), (4, 5): (4, 3), (7, 1): (7, 2)}
     )) # more box targets than boxes
     assert breadth_first_search(env=unsolvable_env) == None
+
+def test_render_path():
+    render_path(env=env, path=[RIGHT, RIGHT, RIGHT, DOWN, LEFT, LEFT, LEFT, LEFT, DOWN, LEFT, LEFT, DOWN, DOWN, RIGHT, UP, LEFT, UP, UP, RIGHT, RIGHT, DOWN, LEFT, UP, LEFT, DOWN, UP, UP, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN, DOWN], save_fig="./tests/environment/output/test_render_path.png", show_fig=False)
+
+def test_animate_path():
+    animate_path(env=env, path=[RIGHT, RIGHT, RIGHT, DOWN, LEFT, LEFT, LEFT, LEFT, DOWN, LEFT, LEFT, DOWN, DOWN, RIGHT, UP, LEFT, UP, UP, RIGHT, RIGHT, DOWN, LEFT, UP, LEFT, DOWN, UP, UP, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN, DOWN], save_ani="./tests/environment/output/test_animate_path.gif", draw_arrows=False)
+
+def test_animate_path_trajectory():
+    animate_path(env=env, path=[RIGHT, RIGHT, RIGHT, DOWN, LEFT, LEFT, LEFT, LEFT, DOWN, LEFT, LEFT, DOWN, DOWN, RIGHT, UP, LEFT, UP, UP, RIGHT, RIGHT, DOWN, LEFT, UP, LEFT, DOWN, UP, UP, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN, DOWN], save_ani="./tests/environment/output/test_animate_path_trajectory.gif")
