@@ -3,24 +3,48 @@ from gym_sokoban.envs import SokobanEnv
 from gym.spaces.discrete import Discrete
 from environment.const import *
 
-class SokobanEnvImpl(SokobanEnv):
-    fixatedEnv:tuple[np.array, np.array, dict] #(room_fixed, room_state, box_mapping)
+DEFAULT_ENVIRONMENT = (
+        np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 1, 1, 0, 1, 0, 0, 0],
+                  [0, 1, 1, 1, 1, 2, 1, 1, 1, 0],
+                  [0, 1, 1, 1, 2, 1, 1, 1, 1, 0],
+                  [0, 1, 1, 1, 0, 1, 1, 2, 1, 0],
+                  [0, 2, 1, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]),
+        np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 1, 1, 0, 1, 0, 0, 0],
+                  [0, 1, 1, 4, 5, 2, 1, 1, 1, 0],
+                  [0, 1, 1, 1, 2, 4, 1, 4, 1, 0],
+                  [0, 1, 1, 1, 0, 1, 1, 2, 1, 0],
+                  [0, 2, 4, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]),
+        {(6, 7): (5, 7), (5, 4): (5, 5), (4, 5): (4, 3), (7, 1): (7, 2)}
+    )
 
-    def __init__(self, dim_room=(10, 10), max_steps=120, num_boxes=4, num_gen_steps=None, reset=True, fixatedEnv=None):
-        self.fixatedEnv = fixatedEnv
+class SokobanEnvImpl(SokobanEnv):
+    fixated_env:tuple[np.array, np.array, dict] #(room_fixed, room_state, box_mapping)
+
+    def __init__(self, dim_room=(10, 10), max_steps=120, num_boxes=4, num_gen_steps=None, reset=True, fixated_env=None, use_default_env=False):
+        self.fixated_env = DEFAULT_ENVIRONMENT if use_default_env else fixated_env
         super().__init__(dim_room=dim_room, max_steps=max_steps, num_boxes=num_boxes, num_gen_steps=num_gen_steps, reset=reset)
         self.action_space = Discrete(5) # limit to push actions
 
     def reset(self, second_player=False, render_mode='rgb_array') -> None:
-        if (self.fixatedEnv is None):
+        if (self.fixated_env is None):
             super().reset(second_player=second_player, render_mode=render_mode)
         else:
             self._reset_fixated_env(render_mode=render_mode)
     
     def _reset_fixated_env(self, render_mode:str) -> None:
-        self.room_fixed = self.fixatedEnv[0].copy()
-        self.room_state = self.fixatedEnv[1].copy()
-        self.box_mapping = self.fixatedEnv[2].copy()
+        self.room_fixed = self.fixated_env[0].copy()
+        self.room_state = self.fixated_env[1].copy()
+        self.box_mapping = self.fixated_env[2].copy()
 
         self.player_position = np.argwhere(self.room_state == PLAYER)[0]
         self.num_env_steps = 0

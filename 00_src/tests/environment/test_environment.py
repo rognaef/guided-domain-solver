@@ -9,7 +9,7 @@ def test_environment():
     assert len(find_boxes(testee)) == 2
 
 def test_fixated_environment():
-    testee = SokobanEnvImpl(fixatedEnv=(
+    testee = SokobanEnvImpl(fixated_env=(
         np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
