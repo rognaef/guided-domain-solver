@@ -36,7 +36,7 @@ def breadth_first_search(env: SokobanEnvImpl) -> list:
         if box_targets.issubset(current_boxes):
             return path
         
-        for move, dx, dy, tag in ACTIONS:
+        for move, dx, dy, caption in ACTIONS:
             new_x = current_pos[0] + dx
             new_y = current_pos[1] + dy
             

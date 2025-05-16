@@ -22,9 +22,9 @@ class KnowledgeGraph():
             for x in range(len(self.env.room_fixed[y])):
                 tile = self.env.room_fixed[y][x]
                 if tile == FLOOR or tile == BOX_TARGET:
-                    tag = "Floor [{x},{y}]".format(x=x, y=y)
+                    caption = "Floor [{x},{y}]".format(x=x, y=y)
                     has_box_target = tile == BOX_TARGET
-                    nodes.append("(:Floor {{id: {id}, x:{x}, y:{y}, has_box_target:{has_box_target}, tag:\"{tag}\"}})".format(id=id, x=x, y=y, has_box_target=has_box_target, tag=tag))
+                    nodes.append("(:Floor {{id: {id}, x:{x}, y:{y}, has_box_target:{has_box_target}, caption:\"{caption}\"}})".format(id=id, x=x, y=y, has_box_target=has_box_target, caption=caption))
                     id+=1
         cypher = "CREATE " + ",".join(nodes) + ";"
         self.client.write(cypher)
@@ -48,13 +48,13 @@ class KnowledgeGraph():
             for x in range(len(self.env.room_state[y])):
                 tile = self.env.room_state[y][x]
                 if tile == BOX_ON_TARGET or tile == BOX:
-                    tag = "Box"
+                    caption = "Box"
                     is_on_target = tile == BOX_ON_TARGET
-                    nodes.append("(:Box {{id: {id}, x:{x}, y:{y}, is_on_target:{is_on_target}, tag:\"{tag}\"}})".format(id=box_id, x=x, y=y, is_on_target=is_on_target, tag=tag))
+                    nodes.append("(:Box {{id: {id}, x:{x}, y:{y}, is_on_target:{is_on_target}, caption:\"{caption}\"}})".format(id=box_id, x=x, y=y, is_on_target=is_on_target, caption=caption))
                     box_id+=1
                 elif tile == PLAYER:
-                    tag = "Player"
-                    nodes.append("(:Player {{id: {id}, x:{x}, y:{y}, tag:\"{tag}\"}})".format(id=player_id, x=x, y=y, tag=tag))
+                    caption = "Player"
+                    nodes.append("(:Player {{id: {id}, x:{x}, y:{y}, caption:\"{caption}\"}})".format(id=player_id, x=x, y=y, caption=caption))
                     player_id+=1
         cypher = "CREATE " + ",".join(nodes) + ";"
         self.client.write(cypher)
@@ -92,13 +92,13 @@ class KnowledgeGraph():
         # create nodes for the actions
         nodes =[]
         player_pos = find_player(self.env)
-        for id, dx, dy, tag  in ACTIONS:
+        for id, dx, dy, caption  in ACTIONS:
             player_x, player_y = player_pos[0] + dx, player_pos[1] + dy
             box_x, box_y = player_x + dx, player_y + dy
             can_move = pos_in_bound(self.env, player_x, player_y) and self.env.room_state[player_y, player_x] in [FLOOR, BOX_TARGET]
             can_push_box = self.env.room_state[player_y, player_x] in [BOX_ON_TARGET, BOX] and pos_in_bound(self.env, box_x, box_y) and self.env.room_state[box_y, box_x] in [FLOOR, BOX_TARGET]
             if can_move or can_push_box:
-                nodes.append("(:Action {{id: {id}, dx:{dx}, dy:{dy}, tag:\"{tag}\"}})".format(id=id, dx=dx, dy=dy, tag=tag))
+                nodes.append("(:Action {{id: {id}, dx:{dx}, dy:{dy}, caption:\"{caption}\"}})".format(id=id, dx=dx, dy=dy, caption=caption))
         cypher = "CREATE " + ",".join(nodes) + ";"
         self.client.write(cypher)
 
