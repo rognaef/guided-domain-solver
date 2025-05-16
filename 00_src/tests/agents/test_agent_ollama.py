@@ -1,24 +1,21 @@
-import pytest
+import os
 from agents.agent_ollama import AgentOllama
 
 # set up
-testee = AgentOllama("qwen2.5-coder:7b")
+testee = AgentOllama("qwen2.5-coder:7b",
+                     [("system", "You are a helpful assistant that translates {input_language} to {output_language}.",),        
+                      ("human", "{input}"),])
 
-@pytest.fixture(autouse=True)
-def run_around_tests():
-    # Before each
-    # Do nothing
-    yield
-    # After each
-    testee.reset()
+def test_invoke():
+    answer = testee.invoke({
+        "input_language": "English",
+        "output_language": "German",
+        "input": "I love programming."})
+    assert answer
 
-def test_prompt():
-    testee.prompt([("human", "hello")])
-    assert len(testee.chain) == 2
-
-def test_clear():
-    testee.prompt([("human", "hello")])
-    assert len(testee.chain) == 2
-    testee.reset()
-    assert len(testee.chain) == 0
-
+def test_write_log():
+    testee.write_log("./tests/agents/output/test_write_log.log", clear_log_path=True)
+    testee.invoke({
+        "input_language": "English",
+        "output_language": "German",
+        "input": "I love programming."})
