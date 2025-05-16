@@ -28,6 +28,6 @@ class AgentOllama():
         if clear_log_path and os.path.exists(log_path):
             os.remove(log_path)
         logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
-        fileHandler = logging.FileHandler(log_path)
+        fileHandler = logging.FileHandler(log_path, encoding='utf-8')
         fileHandler.setFormatter(logFormatter)
         self.logger.addHandler(fileHandler)
