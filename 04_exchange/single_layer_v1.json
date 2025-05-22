@@ -1,0 +1,94 @@
+{
+    "general": {
+        "conntype": "96_MMPX",
+        "subconn": "MMPX :: 96_MMPX-* :: 96_MMPX-50-0-2/111_N",
+        "minfreq": "0.001GHz",
+        "maxfreq": "50GHz",
+        "rlspecs": "Up to 32GHz: maximum S11 -20dB"
+    },
+    "substrate": {
+        "signaltech": "Micro Strip Line",
+        "linewidth": "5.5mil",
+        "dlineground": "0mil",
+        "cmountedonl": "Top"
+    },
+    "stackup": {
+        "soldermask": {
+            "smthickness": "1mil",
+            "smdf": "0.03",
+            "smdk": "3.8"
+        },
+        "layer1": {
+            "material": "Copper",
+            "type": "Signal",
+            "thickness": "1.8mil",
+            "paramdf": "0",
+            "paramdk": "0",
+            "rfsignall": true,
+            "gndl": false,
+            "pwrl": false
+        },
+        "layer2": {
+            "material": "Other",
+            "type": "Prepreg",
+            "thickness": "2.728mil",
+            "paramdf": "0.002",
+            "paramdk": "3.16",
+            "rfsignall": false,
+            "gndl": false,
+            "pwrl": false
+        },
+        "layer3": {
+            "material": "Copper",
+            "type": "Plane",
+            "thickness": "1.2mil",
+            "paramdf": "0",
+            "paramdk": "0",
+            "rfsignall": false,
+            "gndl": true,
+            "pwrl": false
+        },
+        "layer4": {
+            "material": "Other",
+            "type": "Core",
+            "thickness": "19.685mil",
+            "paramdf": "0.002",
+            "paramdk": "4.07",
+            "rfsignall": false,
+            "gndl": false,
+            "pwrl": false
+        },
+        "layer5": {
+            "material": "Copper",
+            "type": "Plane",
+            "thickness": "1.2mil",
+            "paramdf": "0",
+            "paramdk": "0",
+            "rfsignall": false,
+            "gndl": true,
+            "pwrl": false
+        },
+        "vias": {
+            "via1": {
+                "starttoendl": "1-3",
+                "drill": "10mil",
+                "plated": "Yes",
+                "adddrill": false,
+                "dbdrill": "0mil",
+                "stubl": "0mil",
+                "remarks": "18mil catchpad",
+                "via_type": "Ground"
+            }
+        },
+        "layermanrules": {
+            "minlinew": "5.5mil",
+            "mingap": "4mil",
+            "minviadia": "10mil",
+            "minviad": "10mil",
+            "mincatchd": "4mil",
+            "mindmetz": "4mil",
+            "pmetz": "No"
+        },
+        "extinfo": "antipad table"
+    }
+}
