@@ -21,6 +21,8 @@ NEO4J_USERNAME = <Username for Neo4j>
 NEO4J_PASSWORD = <Password for Neo4j>
 ```
 
+The Neo4J database must have installed the plugin APOC. (see <https://neo4j.com/docs/apoc/current/installation/#apoc>)
+
 Install requirements for python enviroment:
 
 ```console
