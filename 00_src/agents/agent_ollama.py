@@ -11,8 +11,8 @@ class AgentOllama():
     chain: Runnable
     logger: str
 
-    def __init__(self, model:str, message_template:Sequence):
-        self.llm = ChatOllama(model=model, temperature=0).invoke
+    def __init__(self, model:str, message_template:Sequence, extract_reasoning= False):
+        self.llm = ChatOllama(model=model, temperature=0, extract_reasoning=extract_reasoning).invoke
         self.prompt = ChatPromptTemplate.from_messages(message_template)
         self.chain = self.prompt | self.llm
         self.logger = logging.getLogger("AgentOllama_{id}".format(id = id(self)))
