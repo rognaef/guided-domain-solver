@@ -2,7 +2,6 @@ import pytest
 import numpy as np
 from gym_sokoban.envs import SokobanEnv
 from knowledge_graph.knowledge_graph import KnowledgeGraph, UP, LEFT
-from knowledge_graph.client_neo4j import Neo4jClient
 
 # set up
 class SokobanEnvFixated(SokobanEnv):     
@@ -36,9 +35,13 @@ def run_around_tests():
     # After each
     env.reset()
 
+def test_step():
+    testee = KnowledgeGraph(env=env)
+    assert testee.step(UP, -0.1, False) == None
+
 def test_get_possible_actions():
     testee = KnowledgeGraph(env=env)
     possible_actions = testee.get_possible_actions()
     assert len(possible_actions) == 2
-    assert possible_actions[0] == UP
-    assert possible_actions[1] == LEFT
+    assert UP in possible_actions
+    assert LEFT in possible_actions

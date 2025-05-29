@@ -27,6 +27,8 @@ class SokobanEnvFixated(SokobanEnv):
 
         starting_observation = self.render(render_mode)
         return starting_observation
+    
+neo4j_client = Neo4jClient()
 
 @pytest.fixture()
 def env():
@@ -39,9 +41,8 @@ def env():
 @pytest.fixture()
 def client():
     # Before each
-    client = Neo4jClient()
-    client.clear_db()
-    yield client
+    neo4j_client.clear_db()
+    yield neo4j_client
     # After each
     # Nothing
 
@@ -77,17 +78,17 @@ def test_dynamic_layer(env, client):
                                 limit = 25)
     assert len(records) == 2
 
-def test_update(env, client):
+def test_step(env, client):
     testee = EnvironmentGraph(env, client)
-    env.step(UP)
-    testee.update()
+    observation, reward_last, done, info = env.step(UP)
+    testee.step(UP, reward_last, done)
     records, summary, keys =  testee.client.read("""
                                 MATCH (n:Action) RETURN n LIMIT $limit
                                 """,
                                 limit = 25)
     assert len(records) == 3
-    env.step(LEFT)
-    testee.update()
+    observation, reward_last, done, info = env.step(LEFT)
+    testee.step(LEFT, reward_last, done)
     records, summary, keys =  testee.client.read("""
                                 MATCH (n:Action) RETURN n LIMIT $limit
                                 """,

@@ -116,7 +116,7 @@ class EnvironmentGraph(GraphInterface):
                                     MATCH (a:Action) DELETE a
                                 """)
     
-    def update(self) -> None:
+    def step(self, action:int, reward:float, done:bool) -> None:
         self._clear_position_relationships()
         self._clear_action_nodes()
         self._update_player_position()
