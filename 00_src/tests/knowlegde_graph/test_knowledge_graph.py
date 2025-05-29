@@ -39,6 +39,11 @@ def test_step():
     testee = KnowledgeGraph(env=env)
     assert testee.step(UP, -0.1, False) == None
 
+def test_set_state():
+    testee = KnowledgeGraph(env=env)
+    assert testee.step(UP, -0.1, False) == None
+    assert testee.set_state([UP]) == None
+
 def test_get_possible_actions():
     testee = KnowledgeGraph(env=env)
     possible_actions = testee.get_possible_actions()

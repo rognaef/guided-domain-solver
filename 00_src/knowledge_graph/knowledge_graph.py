@@ -19,6 +19,10 @@ class KnowledgeGraph():
     def step(self, action:int, reward:float, done:bool) -> None:
         for graph in self.graphs:
             graph.step(action, reward, done)
+    
+    def set_state(self, trajectory:list[int]) -> None:
+        for graph in self.graphs:
+            graph.set_state(trajectory)
 
     def get_possible_actions(self) -> list[int]:
         records, summary, keys =  self.client.read("MATCH (a:Action) RETURN a")

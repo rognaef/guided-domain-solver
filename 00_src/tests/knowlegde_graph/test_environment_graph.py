@@ -94,3 +94,9 @@ def test_step(env, client):
                                 """,
                                 limit = 25)
     assert len(records) == 2
+
+def test_set_state(env, client):
+    testee = EnvironmentGraph(env, client)
+    observation, reward_last, done, info = env.step(UP)
+    testee.step(UP, reward_last, done)
+    assert testee.set_state([UP]) == None

@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 from environment.environment import SokobanEnvImpl
 from environment.util import *
@@ -43,3 +44,13 @@ def test_as_fixated():
     fixated = testee.as_fixated()
     assert testee.fixated_env is None
     assert fixated.fixated_env is not None
+
+def test_set_state():
+    testee = SokobanEnvImpl(dim_room=(8, 8), max_steps=120, num_boxes=2)
+    fixated = testee.as_fixated()
+    assert fixated.set_state([UP]) == None
+
+def test_set_state_exception():
+    testee = SokobanEnvImpl(dim_room=(8, 8), max_steps=120, num_boxes=2)
+    with pytest.raises(Exception):
+        testee.set_state([UP])

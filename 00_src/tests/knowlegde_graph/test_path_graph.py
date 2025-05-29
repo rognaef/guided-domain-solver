@@ -30,3 +30,13 @@ def test_step(client):
                                 """,
                                 limit = 25)
     assert len(records) == 2
+
+def test_set_state(client):
+    testee = PathGraph(client)
+    testee.step(UP, 0, False)
+    assert testee.set_state([UP]) == None
+
+def test_set_state_exception(client):
+    testee = PathGraph(client)
+    with pytest.raises(Exception):
+        testee.set_state([UP])

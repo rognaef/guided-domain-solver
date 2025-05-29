@@ -59,3 +59,10 @@ class SokobanEnvImpl(SokobanEnv):
         env = copy.deepcopy(self)
         env.fixated_env = (self.room_fixed, self.room_state, self.box_mapping)
         return env
+    
+    def set_state(self, trajectory:list[int]) -> None:
+        if self.fixated_env is None:
+            raise Exception("State can only be set on fixed environment.")
+        self.reset()
+        for action in trajectory:
+            self.step(action)

@@ -145,3 +145,14 @@ class EnvironmentGraph(GraphInterface):
             box_pos = boxes[0]
             self.client.write("MATCH (b:Box {{id: {id}}}) SET b += {{x: {x}, y: {y}}} RETURN b".format(id=id, x=box_pos[0], y=box_pos[1]))
             boxes.remove(box_pos)
+    
+    def set_state(self, trajectory:list[int]) -> None:
+        self._clear_dynamic_layer()
+        self._init_dynamic_layer()
+
+    def _clear_dynamic_layer(self) -> None:
+        self._clear_position_relationships()
+        self._clear_action_nodes()
+        self.client.write("MATCH () -[r:SHOULD_GO_TO] -> () DELETE r")
+        self.client.write("MATCH (n:Player) DELETE n")
+        self.client.write("MATCH (n:Box) DELETE n")
