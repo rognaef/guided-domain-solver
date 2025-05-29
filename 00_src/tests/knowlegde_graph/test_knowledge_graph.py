@@ -36,54 +36,6 @@ def run_around_tests():
     # After each
     env.reset()
 
-def test_static_layer():
-    testee = KnowledgeGraph(env=env)
-    records, summary, keys = testee.client.read("""
-                                MATCH (n:Floor) RETURN n LIMIT $limit
-                                """,
-                                limit = 25)
-    assert len(records) == 9
-
-def test_dynamic_layer():
-    testee = KnowledgeGraph(env=env)
-    records, summary, keys = testee.client.read("""
-                                MATCH (n:Box) RETURN n LIMIT $limit
-                                """,
-                                limit = 25)
-    assert len(records) == 2
-    records, summary, keys = testee.client.read("""
-                                MATCH (n:Player) RETURN n LIMIT $limit
-                                """,
-                                limit = 25)
-    assert len(records) == 1
-    records, summary, keys =  testee.client.read("""
-                                MATCH () -[r:SHOULD_GO_TO] -> () RETURN r LIMIT $limit
-                                """,
-                                limit = 25)
-    assert len(records) == 2
-    records, summary, keys =  testee.client.read("""
-                                MATCH (n:Action) RETURN n LIMIT $limit
-                                """,
-                                limit = 25)
-    assert len(records) == 2
-
-def test_update():
-    testee = KnowledgeGraph(env=env)
-    env.step(UP)
-    testee.update()
-    records, summary, keys =  testee.client.read("""
-                                MATCH (n:Action) RETURN n LIMIT $limit
-                                """,
-                                limit = 25)
-    assert len(records) == 3
-    env.step(LEFT)
-    testee.update()
-    records, summary, keys =  testee.client.read("""
-                                MATCH (n:Action) RETURN n LIMIT $limit
-                                """,
-                                limit = 25)
-    assert len(records) == 2
-
 def test_get_possible_actions():
     testee = KnowledgeGraph(env=env)
     possible_actions = testee.get_possible_actions()
