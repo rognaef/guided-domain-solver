@@ -2,6 +2,7 @@ from knowledge_graph.client_neo4j import Neo4jClient
 from knowledge_graph.graph_interface import GraphInterface
 from environment.const import *
 from environment.util import *
+import copy
 
 class PathGraph(GraphInterface):
     client : Neo4jClient
@@ -9,6 +10,9 @@ class PathGraph(GraphInterface):
     max_id: int
     node_id : int
     reward : float
+
+    root_parent_id = 0
+    learning_rate = 0.1
 
     def __init__(self, client: Neo4jClient) -> None:
         self.client = client
@@ -19,7 +23,7 @@ class PathGraph(GraphInterface):
         self._init_path()
 
     def _init_path(self):
-        cypher = "CREATE (:Path {{id: {id}, parent_id:{parent_id}, possible_actions:{possible_actions}, trajectory:{trajectory}, reward:{reward}, done:{done}, caption:\"{caption}\"}});".format(id=self.node_id, parent_id=0, possible_actions=self._get_possible_actions(), trajectory=self.trajectory, reward=0, done=False, caption="Root")
+        cypher = "CREATE (:Path {{id: {id}, parent_id:{parent_id}, possible_actions:{possible_actions}, trajectory:{trajectory}, reward:{reward}, value:{value}, done:{done}, caption:\"{caption}\"}});".format(id=self.node_id, parent_id=self.root_parent_id, possible_actions=self._get_possible_actions(), trajectory=self.trajectory, reward=0, value=0, done=False, caption="Root")
         self.client.write(cypher)
 
     def _get_possible_actions(self) -> list[int]:
@@ -35,7 +39,7 @@ class PathGraph(GraphInterface):
 
         # create new node
         caption = "Solution" if done else "Path"
-        cypher = "CREATE (:Path {{id: {id}, parent_id:{parent_id}, possible_actions:{possible_actions}, trajectory:{trajectory}, reward:{reward}, done:{done}, caption:\"{caption}\"}});".format(id=self.node_id, parent_id=parent_id, possible_actions=self._get_possible_actions(), trajectory=self.trajectory, reward=self.reward, done=done, caption=caption)
+        cypher = "CREATE (:Path {{id: {id}, parent_id:{parent_id}, possible_actions:{possible_actions}, trajectory:{trajectory}, reward:{reward}, value:{value}, done:{done}, caption:\"{caption}\"}});".format(id=self.node_id, parent_id=parent_id, possible_actions=self._get_possible_actions(), trajectory=self.trajectory, reward=self.reward, value=self.reward, done=done, caption=caption)
         self.client.write(cypher)
 
         # create relationship
@@ -57,3 +61,14 @@ class PathGraph(GraphInterface):
         self.trajectory = path_node.get("trajectory")
         self.node_id = path_node.get("id")
         self.reward = path_node.get("reward")
+
+    def backprop(self, sim_value:float):
+        current_id = copy.deepcopy(self.node_id)
+        value = copy.deepcopy(sim_value)
+
+        while current_id is not self.root_parent_id:
+            value = value * self.learning_rate
+            records, summary, keys = self.client.read("MATCH (p:Path) WHERE p.id = {id} SET p += {{value: p.value + {value}}} return p".format(id=current_id, value=value))
+            if len(records) != 1:
+                raise Exception("Path node with id {id} not found".format(id=current_id))
+            current_id = records[0]["p"]["parent_id"]

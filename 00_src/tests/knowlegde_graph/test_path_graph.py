@@ -40,3 +40,9 @@ def test_set_state_exception(client):
     testee = PathGraph(client)
     with pytest.raises(Exception):
         testee.set_state([UP])
+
+def test_backprop_exception(client):
+    testee = PathGraph(client)
+    testee.node_id = -1
+    with pytest.raises(Exception):
+        testee.backprop(-0.1)

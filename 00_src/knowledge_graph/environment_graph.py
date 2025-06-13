@@ -156,3 +156,6 @@ class EnvironmentGraph(GraphInterface):
         self.client.write("MATCH () -[r:SHOULD_GO_TO] -> () DELETE r")
         self.client.write("MATCH (n:Player) DELETE n")
         self.client.write("MATCH (n:Box) DELETE n")
+
+    def backprop(self, sim_value:float) -> None:
+        super().backprop(sim_value)

@@ -2,16 +2,16 @@
 platform win32 -- Python 3.10.14, pytest-8.3.5, pluggy-1.5.0
 rootdir: C:\Users\roger.naef\Documents\vm-code-generation-with-knowledge-graph\00_src
 plugins: anyio-4.9.0, langsmith-0.3.42, cov-6.1.1
-collected 32 items
+collected 34 items
 
-tests\agents\test_agent_ollama.py ..                                     [  6%]
-tests\environment\test_environment.py .....                              [ 21%]
-tests\environment\test_util.py ......                                    [ 40%]
-tests\environment\test_visualization.py ....                             [ 53%]
-tests\knowlegde_graph\test_client_neo4j.py ....                          [ 65%]
-tests\knowlegde_graph\test_environment_graph.py ....                     [ 78%]
-tests\knowlegde_graph\test_knowledge_graph.py ...                        [ 87%]
-tests\knowlegde_graph\test_path_graph.py ....                            [100%]
+tests\agents\test_agent_ollama.py ..                                     [  5%]
+tests\environment\test_environment.py .....                              [ 20%]
+tests\environment\test_util.py ......                                    [ 38%]
+tests\environment\test_visualization.py ....                             [ 50%]
+tests\knowlegde_graph\test_client_neo4j.py ....                          [ 61%]
+tests\knowlegde_graph\test_environment_graph.py ....                     [ 73%]
+tests\knowlegde_graph\test_knowledge_graph.py ....                       [ 85%]
+tests\knowlegde_graph\test_path_graph.py .....                           [100%]
 
 =============================== tests coverage ================================
 ______________ coverage: platform win32, python 3.10.14-final-0 _______________
@@ -24,10 +24,10 @@ environment\environment.py                36      0   100%
 environment\util.py                       47      0   100%
 environment\visualization.py             138      1    99%
 knowledge_graph\client_neo4j.py           38      0   100%
-knowledge_graph\environment_graph.py     106      0   100%
-knowledge_graph\graph_interface.py         8      2    75%
-knowledge_graph\knowledge_graph.py        23      0   100%
-knowledge_graph\path_graph.py             44      0   100%
+knowledge_graph\environment_graph.py     108      0   100%
+knowledge_graph\graph_interface.py        11      2    82%
+knowledge_graph\knowledge_graph.py        26      0   100%
+knowledge_graph\path_graph.py             56      0   100%
 ----------------------------------------------------------
-TOTAL                                    472      3    99%
-======================== 32 passed in 75.88s (0:01:15) ========================
+TOTAL                                    492      3    99%
+======================== 34 passed in 82.10s (0:01:22) ========================

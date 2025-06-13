@@ -23,6 +23,10 @@ class KnowledgeGraph():
     def set_state(self, trajectory:list[int]) -> None:
         for graph in self.graphs:
             graph.set_state(trajectory)
+    
+    def backprop(self, sim_value:float) -> None:
+        for graph in self.graphs:
+            graph.backprop(sim_value)
 
     def get_possible_actions(self) -> list[int]:
         records, summary, keys =  self.client.read("MATCH (a:Action) RETURN a")
