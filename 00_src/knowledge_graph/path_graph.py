@@ -42,7 +42,7 @@ class PathGraph(GraphInterface):
 
         # create new node
         caption = "Solution" if done else "Path"
-        cypher = "CREATE (:Path {{id: {id}, parent_id:{parent_id}, possible_actions:{possible_actions}, trajectory:{trajectory}, reward:{reward}, value:{value}, done:{done}, caption:\"{caption}\"}});".format(id=self.node_id, parent_id=self.parent_id, possible_actions=self._get_possible_actions(), trajectory=self.trajectory, reward=self.reward, value=self.reward, done=done, caption=caption)
+        cypher = "CREATE (:Path {{id: {id}, parent_id:{parent_id}, possible_actions:{possible_actions}, trajectory:{trajectory}, reward:{reward}, value:{value}, done:{done}, caption:\"{caption}\"}});".format(id=self.node_id, parent_id=self.parent_id, possible_actions=self._get_possible_actions(), trajectory=self.trajectory, reward=self.reward, value=0, done=done, caption=caption)
         self.client.write(cypher)
 
         # create relationship
@@ -66,12 +66,12 @@ class PathGraph(GraphInterface):
         self.reward = path_node.get("reward")
 
     def backprop(self, sim_value:float):
-        current_id = copy.deepcopy(self.parent_id)
+        current_id = copy.deepcopy(self.node_id)
         value = copy.deepcopy(sim_value)
 
         while current_id is not self.root_parent_id:
-            value = value * self.decay
             records, summary, keys = self.client.read("MATCH (p:Path) WHERE p.id = {id} SET p += {{value: p.value + ({learning_rate} * {value})}} return p".format(id=current_id, learning_rate=self.learning_rate, value=value))
             if len(records) != 1:
                 raise Exception("Path node with id {id} not found".format(id=current_id))
+            value = value * self.decay
             current_id = records[0]["p"]["parent_id"]

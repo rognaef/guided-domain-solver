@@ -27,7 +27,7 @@ knowledge_graph\client_neo4j.py           38      0   100%
 knowledge_graph\environment_graph.py     108      0   100%
 knowledge_graph\graph_interface.py        11      2    82%
 knowledge_graph\knowledge_graph.py        26      0   100%
-knowledge_graph\path_graph.py             56      0   100%
+knowledge_graph\path_graph.py             59      0   100%
 ----------------------------------------------------------
-TOTAL                                    492      3    99%
-======================== 34 passed in 82.10s (0:01:22) ========================
+TOTAL                                    495      3    99%
+======================== 34 passed in 81.71s (0:01:21) ========================
