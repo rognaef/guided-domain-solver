@@ -14,7 +14,7 @@ class PathGraph(GraphInterface):
 
     root_parent_id = 0
     learning_rate = 0.1
-    decay = 0.9
+    decay = 0.01
 
     def __init__(self, client: Neo4jClient) -> None:
         self.client = client
