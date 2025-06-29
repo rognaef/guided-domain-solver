@@ -32,8 +32,8 @@ def breadth_first_search(env: SokobanEnvImpl) -> list:
     while queue:
         current_pos, current_boxes, path = queue.popleft()
         
-        # Check if all box targets are covered
-        if box_targets.issubset(current_boxes):
+        # Check if all box targets are covered or all boxes are placed
+        if box_targets.issubset(current_boxes) or set(current_boxes).issubset(box_targets):
             return path
         
         for move, dx, dy, caption in ACTIONS:

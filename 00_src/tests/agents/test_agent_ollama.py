@@ -2,7 +2,7 @@ import os
 from agents.agent_ollama import AgentOllama
 
 # set up
-testee = AgentOllama("qwen2.5-coder:7b",
+testee = AgentOllama("qwen3:8b",
                      [("system", "You are a helpful assistant that translates {input_language} to {output_language}.",),        
                       ("human", "{input}"),])
 
