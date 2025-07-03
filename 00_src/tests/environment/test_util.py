@@ -48,3 +48,9 @@ def test_breadth_first_search_unsolvable():
         {(6, 7): (5, 7), (5, 4): (5, 5), (4, 5): (4, 3), (7, 1): (7, 2)}
     )) # Wall divides playground
     assert breadth_first_search(env=unsolvable_env) == None
+
+def test_find_shortest_paths_to_place_remaining_boxes():
+    result = find_shortest_paths_to_place_remaining_boxes(env)
+    assert len(result) == 4
+    for box in result:
+        assert box["shortest_path_to_place"] is not None

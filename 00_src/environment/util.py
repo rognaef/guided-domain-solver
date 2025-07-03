@@ -1,6 +1,11 @@
 from collections import deque
 from environment.const import *
 from environment.environment import SokobanEnvImpl
+import numpy as np
+import copy
+import sys
+
+action_caption_dict = {0: "WAIT", UP:"UP", DOWN:"DOWN", LEFT:"LEFT", RIGHT:"RIGHT"}
 
 find_player = lambda env: next((x, y) for y, row in enumerate(env.room_state) for x, val in enumerate(row) if val == PLAYER)
 find_boxes = lambda env: [(x, y) for y, row in enumerate(env.room_state) for x, val in enumerate(row) if val == BOX_ON_TARGET or val == BOX]
@@ -78,3 +83,32 @@ def breadth_first_search(env: SokobanEnvImpl) -> list:
     
     # No solution found
     return None
+                
+def find_shortest_paths_to_place_remaining_boxes(env:SokobanEnvImpl) -> list:
+    """
+    Seraches the shortest paths to place every remaining box in the given enviroment individually.
+    To find the shortest path for a box, the other boxes are considered as walls
+
+    Args:
+        env: The Sokoban environment.
+    """
+    result = []
+    for y, row in enumerate(env.room_state):
+        for x, val in enumerate(row):
+            if val == BOX:
+                search_env = _create_search_env(env, (x,y))
+                path = np.array2string(np.vectorize(action_caption_dict.get)(breadth_first_search(search_env)), separator=", ", max_line_width=sys.maxsize)
+                result.append({"caption":"Box [{x},{y}]".format(x=x, y=y), "x":x, "y":y, "shortest_path_to_place":path})
+    result_sorted = sorted(result, key=lambda n: len(n['shortest_path_to_place']))
+    return result_sorted
+
+def _create_search_env(env:SokobanEnvImpl, target_box:tuple[int,int]) -> SokobanEnvImpl:
+    room_state = copy.deepcopy(env.room_state)
+    room_fixed = copy.deepcopy(env.room_fixed)
+
+    for y, row in enumerate(room_state):
+        for x, val in enumerate(row):
+            if (val == BOX and not (x == target_box[0] and y == target_box[1])) or val == BOX_ON_TARGET:
+                room_state[y][x] = WALL
+                room_fixed[y][x] = WALL
+    return SokobanEnvImpl(fixated_env=(room_fixed,room_state,{}))
