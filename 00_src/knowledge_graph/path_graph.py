@@ -30,7 +30,7 @@ class PathGraph(GraphInterface):
         self.client.write(cypher)
 
     def _get_possible_actions(self) -> list[int]:
-        records, summary, keys =  self.client.read("MATCH (a:Action) RETURN a")
+        records, summary, keys =  self.client.read("MATCH (a:Action) RETURN a ORDER BY a.id")
         return [record["a"].get("id") for record in records]
     
     def step(self, action:int, reward:float, done:bool) -> None:
