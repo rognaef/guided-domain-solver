@@ -4,12 +4,13 @@ from langchain_core.runnables import Runnable
 from langchain_core.prompts import ChatPromptTemplate
 from collections.abc import Sequence
 import logging
+from logging import Logger
 
 class AgentOllama():
     llm: ChatOllama
     prompt: ChatPromptTemplate
     chain: Runnable
-    logger: str
+    logger: Logger
 
     def __init__(self, model:str, message_template:Sequence, extract_reasoning= False):
         self.llm = ChatOllama(model=model, temperature=0, extract_reasoning=extract_reasoning).invoke

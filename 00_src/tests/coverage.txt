@@ -18,7 +18,7 @@ ______________ coverage: platform win32, python 3.10.14-final-0 _______________
 
 Name                                   Stmts   Miss  Cover
 ----------------------------------------------------------
-agents\agent_ollama.py                    29      0   100%
+agents\agent_ollama.py                    30      0   100%
 environment\const.py                       3      0   100%
 environment\environment.py                36      0   100%
 environment\util.py                       70      0   100%
@@ -29,5 +29,5 @@ knowledge_graph\graph_interface.py        11      2    82%
 knowledge_graph\knowledge_graph.py        26      0   100%
 knowledge_graph\path_graph.py             59      0   100%
 ----------------------------------------------------------
-TOTAL                                    518      3    99%
-======================== 35 passed in 73.47s (0:01:13) ========================
+TOTAL                                    519      3    99%
+======================== 35 passed in 73.64s (0:01:13) ========================
