@@ -5,8 +5,6 @@ import numpy as np
 import copy
 import sys
 
-action_caption_dict = {0: "WAIT", UP:"UP", DOWN:"DOWN", LEFT:"LEFT", RIGHT:"RIGHT"}
-
 find_player = lambda env: next((x, y) for y, row in enumerate(env.room_state) for x, val in enumerate(row) if val == PLAYER)
 find_boxes = lambda env: [(x, y) for y, row in enumerate(env.room_state) for x, val in enumerate(row) if val == BOX_ON_TARGET or val == BOX]
 find_box_targets = lambda env: set((x, y) for y, row in enumerate(env.room_fixed) for x, val in enumerate(row) if val == BOX_TARGET)
