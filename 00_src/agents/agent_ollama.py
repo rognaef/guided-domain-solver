@@ -31,4 +31,5 @@ class AgentOllama():
         logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
         fileHandler = logging.FileHandler(log_path, encoding='utf-8')
         fileHandler.setFormatter(logFormatter)
+        self.logger.handlers.clear()
         self.logger.addHandler(fileHandler)

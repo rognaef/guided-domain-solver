@@ -2,16 +2,16 @@
 platform win32 -- Python 3.10.14, pytest-8.3.5, pluggy-1.5.0
 rootdir: C:\Users\roger.naef\Documents\vm-code-generation-with-knowledge-graph\00_src
 plugins: anyio-4.9.0, langsmith-0.3.42, cov-6.1.1
-collected 37 items
+collected 38 items
 
 tests\agents\test_agent_ollama.py ..                                     [  5%]
 tests\environment\test_environment.py .....                              [ 18%]
-tests\environment\test_util.py .......                                   [ 37%]
-tests\environment\test_visualization.py ....                             [ 48%]
-tests\knowlegde_graph\test_client_neo4j.py ....                          [ 59%]
-tests\knowlegde_graph\test_environment_graph.py ....                     [ 70%]
-tests\knowlegde_graph\test_knowledge_graph.py ....                       [ 81%]
-tests\knowlegde_graph\test_path_graph.py .....                           [ 94%]
+tests\environment\test_util.py .......                                   [ 36%]
+tests\environment\test_visualization.py ....                             [ 47%]
+tests\knowledge_graph\test_client_neo4j.py .....                         [ 60%]
+tests\knowledge_graph\test_environment_graph.py ....                     [ 71%]
+tests\knowledge_graph\test_knowledge_graph.py ....                       [ 81%]
+tests\knowledge_graph\test_path_graph.py .....                           [ 94%]
 tests\mcts\test_mcts.py ..                                               [100%]
 
 =============================== tests coverage ================================
@@ -19,12 +19,12 @@ ______________ coverage: platform win32, python 3.10.14-final-0 _______________
 
 Name                                   Stmts   Miss  Cover
 ----------------------------------------------------------
-agents\agent_ollama.py                    30      0   100%
+agents\agent_ollama.py                    31      0   100%
 environment\const.py                       5      0   100%
 environment\environment.py                36      0   100%
 environment\util.py                       69      0   100%
 environment\visualization.py             138      1    99%
-knowledge_graph\client_neo4j.py           38      0   100%
+knowledge_graph\client_neo4j.py           49      0   100%
 knowledge_graph\environment_graph.py     108      0   100%
 knowledge_graph\graph_interface.py        11      2    82%
 knowledge_graph\knowledge_graph.py        26      0   100%
@@ -36,5 +36,5 @@ mcts\selection.py                          6      1    83%
 mcts\simulation.py                        12      0   100%
 mcts\state.py                             26      0   100%
 ----------------------------------------------------------
-TOTAL                                    678      5    99%
-======================== 37 passed in 89.18s (0:01:29) ========================
+TOTAL                                    690      5    99%
+======================== 38 passed in 92.24s (0:01:32) ========================
