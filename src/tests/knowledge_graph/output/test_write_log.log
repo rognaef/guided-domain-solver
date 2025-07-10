@@ -1,3 +1,0 @@
-2025-07-07 18:04:42,655 [MainThread  ] [INFO ]  successful write:CREATE (a:TestNode { Tag : 'This is a test' })
-2025-07-07 18:04:42,657 [MainThread  ] [INFO ]  successful read: MATCH (n:TestNode) RETURN n LIMIT $limit; result: [<Record n=<Node element_id='4:003e5905-6cd6-4f51-bc7e-53fd5d9f7a2d:863' labels=frozenset({'TestNode'}) properties={'Tag': 'This is a test'}>>]
-2025-07-07 18:04:42,660 [MainThread  ] [INFO ]  cleared all nodes in neo4j

@@ -1,21 +1,21 @@
 ============================= test session starts =============================
-platform win32 -- Python 3.10.14, pytest-8.3.5, pluggy-1.5.0
-rootdir: C:\Users\roger.naef\Documents\vm-code-generation-with-knowledge-graph\00_src
-plugins: anyio-4.9.0, langsmith-0.3.42, cov-6.1.1
+platform win32 -- Python 3.10.0, pytest-8.3.5, pluggy-1.5.0
+rootdir: C:\Users\roger\Documents\Projekte\vm-code-generation-with-knowledge-graph
+plugins: anyio-4.9.0, langsmith-0.4.4, cov-6.1.1
 collected 38 items
 
-tests\agents\test_agent_ollama.py ..                                     [  5%]
-tests\environment\test_environment.py .....                              [ 18%]
-tests\environment\test_util.py .......                                   [ 36%]
-tests\environment\test_visualization.py ....                             [ 47%]
-tests\knowledge_graph\test_client_neo4j.py .....                         [ 60%]
-tests\knowledge_graph\test_environment_graph.py ....                     [ 71%]
-tests\knowledge_graph\test_knowledge_graph.py ....                       [ 81%]
-tests\knowledge_graph\test_path_graph.py .....                           [ 94%]
-tests\mcts\test_mcts.py ..                                               [100%]
+..\tests\agents\test_agent_ollama.py ..                                  [  5%]
+..\tests\environment\test_environment.py .....                           [ 18%]
+..\tests\environment\test_util.py .......                                [ 36%]
+..\tests\environment\test_visualization.py ....                          [ 47%]
+..\tests\knowledge_graph\test_client_neo4j.py .....                      [ 60%]
+..\tests\knowledge_graph\test_environment_graph.py ....                  [ 71%]
+..\tests\knowledge_graph\test_knowledge_graph.py ....                    [ 81%]
+..\tests\knowledge_graph\test_path_graph.py .....                        [ 94%]
+..\tests\mcts\test_mcts.py ..                                            [100%]
 
 =============================== tests coverage ================================
-______________ coverage: platform win32, python 3.10.14-final-0 _______________
+_______________ coverage: platform win32, python 3.10.0-final-0 _______________
 
 Name                                   Stmts   Miss  Cover
 ----------------------------------------------------------
@@ -37,4 +37,4 @@ mcts\simulation.py                        12      0   100%
 mcts\state.py                             26      0   100%
 ----------------------------------------------------------
 TOTAL                                    690      5    99%
-======================== 38 passed in 92.24s (0:01:32) ========================
+======================= 38 passed in 252.57s (0:04:12) ========================

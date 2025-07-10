@@ -1,5 +1,4 @@
 [run]
-source = ../00_src
 relative_files = true
 
 [report]

@@ -1,4 +1,3 @@
-import os
 from agents.agent_ollama import AgentOllama
 
 # set up
@@ -14,7 +13,7 @@ def test_invoke():
     assert answer
 
 def test_write_log():
-    testee.write_log("./tests/agents/output/test_write_log.log", clear_log_path=True)
+    testee.write_log("../tests/agents/output/test_write_log.log", clear_log_path=True)
     testee.invoke({
         "input_language": "English",
         "output_language": "German",

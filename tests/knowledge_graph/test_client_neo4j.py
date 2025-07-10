@@ -44,6 +44,6 @@ def test_clear_db():
     assert len(records) == 0
 
 def test_write_log():
-    testee.write_log("./tests/knowledge_graph/output/test_write_log.log", clear_log_path=True)
+    testee.write_log("../tests/knowledge_graph/output/test_write_log.log", clear_log_path=True)
     testee.write("CREATE (a:TestNode { Tag : 'This is a test' })")
     testee.read("MATCH (n:TestNode) RETURN n LIMIT $limit", limit = 25)
