@@ -1,6 +1,6 @@
-from environment.const import *
-from environment.util import *
-from environment.environment import SokobanEnvImpl
+from .const import *
+from .util import find_boxes, find_player
+from .environment import SokobanEnvImpl
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg

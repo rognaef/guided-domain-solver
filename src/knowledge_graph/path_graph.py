@@ -1,5 +1,5 @@
-from knowledge_graph.client_neo4j import Neo4jClient
-from knowledge_graph.graph_interface import GraphInterface
+from .client_neo4j import Neo4jClient
+from .graph_interface import GraphInterface
 from environment.const import *
 from environment.util import *
 import copy

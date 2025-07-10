@@ -1,6 +1,6 @@
 from collections import deque
-from environment.const import *
-from environment.environment import SokobanEnvImpl
+from .const import *
+from .environment import SokobanEnvImpl
 import numpy as np
 import copy
 import sys

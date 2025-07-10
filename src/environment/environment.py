@@ -2,7 +2,7 @@ import copy
 import numpy as np
 from gym_sokoban.envs import SokobanEnv
 from gym.spaces.discrete import Discrete
-from environment.const import *
+from .const import *
 
 DEFAULT_ENVIRONMENT = (
         np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

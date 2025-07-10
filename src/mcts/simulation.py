@@ -1,6 +1,6 @@
 from environment.const import *
 from environment.util import breadth_first_search
-from mcts.state import OverallState, GlobalState
+from .state import OverallState, GlobalState
 
 def eval_state()->float:
     optimal = breadth_first_search(GlobalState().env)

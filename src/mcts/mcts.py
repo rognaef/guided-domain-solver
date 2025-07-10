@@ -1,10 +1,10 @@
 from environment.environment import SokobanEnvImpl
 from knowledge_graph.knowledge_graph import KnowledgeGraph
-from mcts.selection import selection
-from mcts.expansion import expansion
-from mcts.simulation import simulation, eval_state
-from mcts.backprop import backprop
-from mcts.state import InputState, OverallState, OutputState, GlobalState
+from .selection import selection
+from .expansion import expansion
+from .simulation import simulation, eval_state
+from .backprop import backprop
+from .state import InputState, OverallState, OutputState, GlobalState
 from langgraph.utils.runnable import RunnableLike
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph

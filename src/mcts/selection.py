@@ -1,4 +1,4 @@
-from mcts.state import InputState, OverallState, GlobalState
+from .state import InputState, OverallState, GlobalState
          
 def selection(state: InputState) -> OverallState:
     records, summary, keys =  GlobalState().kg.client.read("""
