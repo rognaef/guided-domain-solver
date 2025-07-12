@@ -5,7 +5,7 @@ import random
 import ast
 from mcts.state import OverallState, GlobalState
 
-agent_player = AgentOllama("qwen3:32b",
+agent_player = AgentOllama("qwen3:8b",
 [("system","You are a player which tries to solve a Sokoban game. Keep the reasoning short. Respond only with a single action out of ['UP', 'DOWN', 'LEFT', 'RIGHT'].",),
 ("human",("""Use the following results retrieved from a database to provide the next action for the Sokoban game.
 Enviroment: {enviorment}

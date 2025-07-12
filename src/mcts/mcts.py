@@ -1,7 +1,8 @@
 from environment.environment import SokobanEnvImpl
+from environment.visualization import animate, render
 from knowledge_graph.knowledge_graph import KnowledgeGraph
 from .selection import selection
-from .expansion import expansion
+from .expansion import expansion, agent_player
 from .simulation import simulation, eval_state
 from .backprop import backprop
 from .state import InputState, OverallState, OutputState, GlobalState
@@ -28,9 +29,15 @@ class MonteCarloTreeSearch:
 
         self.mcts_step = langgraph.compile()
     
-    def solve(self, env:SokobanEnvImpl) -> set[int, float]:
-        GlobalState().env = env
-        GlobalState().kg = KnowledgeGraph(env)
+    def solve(self, env:SokobanEnvImpl, log_path:str=None) -> set[int, float]:
+        fixed_env = env.as_fixated()
+        GlobalState().env = fixed_env
+        GlobalState().kg = KnowledgeGraph(fixed_env)
+
+        if log_path is not None:
+            agent_player.write_log("{log_path}agent_player.log".format(log_path=log_path), clear_log_path=True)
+            GlobalState().kg.client.write_log("{log_path}client_neoj4.log".format(log_path=log_path), clear_log_path=True)
+
         GlobalState().kg.backprop(eval_state())
 
         start_time = time.time()
@@ -44,6 +51,10 @@ class MonteCarloTreeSearch:
         num_explored_nodes = len(path_nodes)
         records, summary, keys = GlobalState().kg.client.read("""MATCH (p:Path) WHERE p.done RETURN p """)
         trajectory = records[0]["p"]["trajectory"]
+        if log_path is not None:
+            fixed_env.reset()
+            render(env=fixed_env, path=trajectory, save_fig="{log_path}solution.png".format(log_path=log_path), show_fig=False)
+            animate(env=fixed_env, path=trajectory, save_ani="{log_path}solution.gif".format(log_path=log_path))
         return trajectory, num_explored_nodes, needed_time
 
 class Builder:
