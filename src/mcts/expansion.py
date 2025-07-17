@@ -112,6 +112,30 @@ def expansion_random_sampling(state: OverallState) -> OverallState:
 
      return {"reward":reward_last, "done":done}
 
+def expansion_random(state: OverallState) -> OverallState:
+     id = state.get("selection_id")
+     trajectory = state.get("selection_trajectory")
+     GlobalState().env.set_state(trajectory)
+     GlobalState().kg.set_state(trajectory)
+
+     # Unexplored actions
+     records, summary, keys =  GlobalState().kg.client.read("""
+                            MATCH (a:Action)
+                            WHERE NOT EXISTS {{
+                              MATCH (p:Path {{id: {id}}})-[m:MOVE]->(c:Path)
+                              WHERE m.id = a.id
+                            }}
+                            RETURN a.caption AS possible_actions
+                            ORDER BY a.id DESC
+                            """.format(id=id))
+     possible_actions = [caption_action_dict.get(record["possible_actions"].upper()) for record in records]
+    
+     next_action = random.choice(possible_actions)
+
+     observation, reward_last, done, info = _doStep(next_action)
+
+     return {"reward":reward_last, "done":done}
+
 def _doStep(action:int) -> bool:
     observation, reward_last, done, info = GlobalState().env.step(action)
     GlobalState().kg.step(action, reward_last, done)

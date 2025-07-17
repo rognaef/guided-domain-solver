@@ -112,6 +112,8 @@ def render(env: SokobanEnvImpl, path=None, dpi=300, save_fig=None, show_fig=True
 
     if show_fig:
         plt.show()
+    else:
+        plt.close()
 
 def animate(env:SokobanEnvImpl, path:list[int], save_ani:str, draw_arrows=True, dpi=300) -> None:
     """
