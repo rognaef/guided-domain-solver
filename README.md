@@ -1,6 +1,45 @@
-# VM Code Generation with Knowledge Graph
+<p>
+    <h1 align=center>Code Generation with Knowledge Graph</h1>
+</p>
 
-Code Generation with Knowledge Graph project is an approach to automating software development by leveraging the power of multi-agent systems and knowledge graphs. This project aims to generate code by enabling multiple intelligent agents to collaboratively generate, optimize, and validate code based on a structured knowledge graph that captures domain-specific information.
+<p align="center">
+    <em>Code Generation with Knowledge Graph project is an approach to automating software development by leveraging the power of multi-agent systems and knowledge graphs. This project aims to generate code by enabling multiple intelligent agents to collaboratively generate, optimize, and validate code based on a structured knowledge graph that captures domain-specific information.</em>
+</p>
+
+<p align="center">
+<a href="https://www.python.org/doc/versions/" target="_blank"><img src="https://img.shields.io/badge/Python-3.10-color=%2334D058.svg" alt="Supported Python versions"></a>
+<a href="tests/coverage.txt" target="_blank"><img src="https://img.shields.io/badge/Tests-passing-color=%2334D058.svg" alt="Tests"></a>
+<a href="tests/coverage.txt" target="_blank"><img src="https://img.shields.io/badge/Coverage-99%25-color=%2334D058.svg" alt="Coverage"></a>
+</p>
+
+<p>
+    <div style="text-align: center;">
+      <h3 style="display: inline;"><a href="#description" target="_blank">Description</a></h3>
+      <h3 style="display: inline;"> | </h3>
+      <h3 style="display: inline;"><a href="#installation" target="_blank">Installation</a></h3>
+      <h3 style="display: inline;"> | </h3>
+      <h3 style="display: inline;"><a href="#examples" target="_blank">Examples</a></h3>
+      <h3 style="display: inline;"> | </h3>
+      <h3 style="display: inline;"><a href="#results" target="_blank">Results</a></h3>
+    </div>
+</p>
+
+<div class="collage">
+  <div class="row" align="center">
+    <img src="docs/images/0000_solved_env.gif" width="20%">
+    <img src="docs/images/0001_solved_env.gif" width="20%">
+    <img src="docs/images/0002_solved_env.gif" width="20%">
+    <img src="docs/images/0003_solved_env.gif" width="20%">
+  </div>
+  <div class="row" align="center">
+    <img src="docs/images/0004_solved_env.gif" width="20%">
+    <img src="docs/images/0005_solved_env.gif" width="20%">
+    <img src="docs/images/0006_solved_env.gif" width="20%">
+    <img src="docs/images/0007_solved_env.gif" width="20%">
+  </div>
+</div>
+
+## Description
 
 ## Installation
 Set up your development environment to use API for agents:
@@ -28,3 +67,8 @@ Install requirements for python enviroment:
 ```console
 >pip install -r requirements.txt
 ```
+
+## Examples
+
+
+## Results
