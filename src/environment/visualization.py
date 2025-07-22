@@ -7,7 +7,7 @@ import matplotlib.image as mpimg
 from matplotlib.animation import FuncAnimation, PillowWriter
 from functools import partial
 
-def render(env: SokobanEnvImpl, path=None, dpi=300, save_fig=None, show_fig=True) -> None:
+def render(env: SokobanEnvImpl, path=None, dpi=300, save_fig=None, show_fig=True, render_end=False, font_size=4) -> None:
     """
     Renders the Sokoban environment and overlays the path with arrows and step numbers.
 
@@ -19,11 +19,12 @@ def render(env: SokobanEnvImpl, path=None, dpi=300, save_fig=None, show_fig=True
         show_fig: Shows the figure
     """
     env = env.as_fixated()
-    image = env.render("rgb_array")
 
-    plt.figure(dpi=dpi)
-    plt.imshow(image, origin='upper')
-    plt.axis('off')
+    if not render_end or not path:
+        image = env.render("rgb_array")
+        plt.figure(dpi=dpi)
+        plt.imshow(image, origin='upper')
+        plt.axis('off')
 
     if path:
         # Convert path to coordinates
@@ -39,21 +40,28 @@ def render(env: SokobanEnvImpl, path=None, dpi=300, save_fig=None, show_fig=True
                 dy = start[1] + directions.get(action)[1]
                 end = (dx, dy)
             player_coordinates.append((start,end,action))
+        
+        if render_end:
+            image = env.render("rgb_array")
+            plt.figure(dpi=dpi)
+            plt.imshow(image, origin='upper')
+            plt.axis('off')
 
         # Scaling for element positions in plot
         scale_begin = lambda a : a * 16
         scale = lambda a : scale_begin(a) + 8
 
         # Draw final boxes
-        for box_coordinate in find_boxes(env):
-            img = mpimg.imread('./environment/elements/box.png')
-            img_box = plt.imshow(img, alpha=0.3, zorder=1)
-            transform = mpl.transforms.Affine2D().translate(scale_begin(box_coordinate[0]), scale_begin(box_coordinate[1]))
-            img_box.set_transform(transform + plt.gca().transData)
+        if not render_end:
+            for box_coordinate in find_boxes(env):
+                img = mpimg.imread('./environment/elements/box.png')
+                img_box = plt.imshow(img, alpha=0.3, zorder=1)
+                transform = mpl.transforms.Affine2D().translate(scale_begin(box_coordinate[0]), scale_begin(box_coordinate[1]))
+                img_box.set_transform(transform + plt.gca().transData)
 
         # Mark the final position
         final = find_player(env)
-        if final not in initBoxes:
+        if final not in initBoxes and not render_end:
             img = mpimg.imread('./environment/elements/player.png')
             img_player = plt.imshow(img, alpha=0.3, zorder=2)
             transform = mpl.transforms.Affine2D().translate(scale_begin(final[0]), scale_begin(final[1]))
@@ -104,7 +112,7 @@ def render(env: SokobanEnvImpl, path=None, dpi=300, save_fig=None, show_fig=True
                 parts.append('...')
 
             step_numbers = ''.join(parts)
-            plt.text(mid[0], mid[1], step_numbers, color='white', fontsize=4,
+            plt.text(mid[0], mid[1], step_numbers, color='white', fontsize=font_size,
                      ha='center', va='center', bbox=dict(boxstyle="round,pad=0.2", fc="black", ec="none", alpha=0.7))
 
     if save_fig is not None:

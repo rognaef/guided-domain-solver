@@ -1,21 +1,21 @@
 ============================= test session starts =============================
-platform win32 -- Python 3.10.14, pytest-8.3.5, pluggy-1.5.0
-rootdir: C:\Users\roger.naef\Documents\vm-code-generation-with-knowledge-graph
-plugins: anyio-4.9.0, langsmith-0.3.42, cov-6.1.1
-collected 40 items
+platform win32 -- Python 3.10.0, pytest-8.3.5, pluggy-1.5.0
+rootdir: C:\Users\roger\Documents\Projekte\vm-code-generation-with-knowledge-graph
+plugins: anyio-4.9.0, langsmith-0.4.4, cov-6.1.1
+collected 41 items
 
-..\tests\agents\test_agent_ollama.py ..                                  [  5%]
+..\tests\agents\test_agent_ollama.py ..                                  [  4%]
 ..\tests\environment\test_environment.py .....                           [ 17%]
-..\tests\environment\test_util.py .......                                [ 35%]
-..\tests\environment\test_visualization.py ....                          [ 45%]
-..\tests\knowledge_graph\test_client_neo4j.py .....                      [ 57%]
-..\tests\knowledge_graph\test_environment_graph.py ....                  [ 67%]
-..\tests\knowledge_graph\test_knowledge_graph.py ....                    [ 77%]
+..\tests\environment\test_util.py .......                                [ 34%]
+..\tests\environment\test_visualization.py .....                         [ 46%]
+..\tests\knowledge_graph\test_client_neo4j.py .....                      [ 58%]
+..\tests\knowledge_graph\test_environment_graph.py ....                  [ 68%]
+..\tests\knowledge_graph\test_knowledge_graph.py ....                    [ 78%]
 ..\tests\knowledge_graph\test_path_graph.py .....                        [ 90%]
 ..\tests\mcts\test_mcts.py ....                                          [100%]
 
 =============================== tests coverage ================================
-______________ coverage: platform win32, python 3.10.14-final-0 _______________
+_______________ coverage: platform win32, python 3.10.0-final-0 _______________
 
 Name                                   Stmts   Miss  Cover
 ----------------------------------------------------------
@@ -23,7 +23,7 @@ agents\agent_ollama.py                    31      0   100%
 environment\const.py                       5      0   100%
 environment\environment.py                36      0   100%
 environment\util.py                       69      0   100%
-environment\visualization.py             139      1    99%
+environment\visualization.py             146      1    99%
 knowledge_graph\client_neo4j.py           49      0   100%
 knowledge_graph\environment_graph.py     108      0   100%
 knowledge_graph\graph_interface.py        11      2    82%
@@ -36,5 +36,5 @@ mcts\selection.py                          6      1    83%
 mcts\simulation.py                        12      0   100%
 mcts\state.py                             26      0   100%
 ----------------------------------------------------------
-TOTAL                                    710      5    99%
-======================= 40 passed in 113.54s (0:01:53) ========================
+TOTAL                                    717      5    99%
+======================= 41 passed in 408.90s (0:06:48) ========================
