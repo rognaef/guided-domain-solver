@@ -65,7 +65,12 @@ from mcts.simulation import simulation
 from mcts.backprop import backprop
 from environment.environment import SokobanEnvImpl
 
-solver = Builder().setSelection(selection).setExpansion(expansion).setSimulation(simulation).setBackprop(backprop).build()
+solver = (Builder()
+          .setSelection(selection)
+          .setExpansion(expansion)
+          .setSimulation(simulation)
+          .setBackprop(backprop)
+          .build())
 env = SokobanEnvImpl(use_default_env=True)
 solver.solve(env, log_path="<Path>")
 ```
