@@ -17,48 +17,31 @@
 <br/>
 
 <div align="center">
-    <strong><a href="#description" target="_blank">Description</a></strong>
+    <strong><a href="#description">Description</a></strong>
     <strong> | </strong>
-    <strong><a href="#installation" target="_blank">Installation</a></strong>
+    <strong><a href="#installation">Installation</a></strong>
     <strong> | </strong>
-    <strong><a href="#examples" target="_blank">Examples</a></strong>
+    <strong><a href="#examples">Examples</a></strong>
     <strong> | </strong>
-    <strong><a href="#results" target="_blank">Results</a></strong>
+    <strong><a href="#results">Results</a></strong>
 </div>
 
-<br/>
-
-<div class="collage">
-  <div class="row" align="center">
-    <img src="docs/images/0000_solved_env.gif" width="30%">
-    <img src="docs/images/0001_solved_env.gif" width="30%">
-    <img src="docs/images/0002_solved_env.gif" width="30%">
-  </div>
-  <div class="row" align="center">
-    <img src="docs/images/0003_solved_env.gif" width="30%">
-    <img src="docs/images/0004_solved_env.gif" width="30%">
-    <img src="docs/images/0005_solved_env.gif" width="30%">
-  </div>
+<div align="center">
+    <img src="docs/images/method_overview.drawio.svg" width="90%">
 </div>
-
-<br/>
 
 ## Description
 
+
+### Knowledge Graph
+<div align="center">
+    <img src="docs/images/KG_Environment.drawio.svg" width="60%">
+</div>
+
 ## Installation
-Set up your development environment to use API for agents:
 
-| API    | Quickstart link |
-| -------- | ------- |
-| OpenAI  | <https://platform.openai.com/docs/libraries?desktop-os=windows&language=python>|
-| Anthropic  | <https://docs.anthropic.com/en/api/getting-started>|
-| AI/ML API  | <https://docs.aimlapi.com/quickstart/setting-up>|
-
-The API key and Neo4J database can be specified in a .env file which can be stored at 00_src/.env and has the following contents:
-
+The Neo4J database can be specified as a .env file, which can be stored inside <a href="src/" target="_blank">src</a>, with the following contents:
 ```
-OPENAI_API_KEY = <YOUR_API_KEY>
-OPENAI_API_BASE_URL = <YOUR_API_URL>
 NEO4J_URI = <URI for Neo4j database>
 NEO4J_USERNAME = <Username for Neo4j>
 NEO4J_PASSWORD = <Password for Neo4j>
@@ -74,5 +57,38 @@ Install requirements for python enviroment:
 
 ## Examples
 
+```python
+from mcts.mcts import Builder
+from mcts.selection import selection
+from mcts.expansion import expansion
+from mcts.simulation import simulation
+from mcts.backprop import backprop
+from environment.environment import SokobanEnvImpl
+
+solver = Builder().setSelection(selection).setExpansion(expansion).setSimulation(simulation).setBackprop(backprop).build()
+env = SokobanEnvImpl(use_default_env=True)
+solver.solve(env, log_path="<Path>")
+```
+
+<div align="center">
+    <img src="docs/images/0000_solved_env.gif" width="50%">
+</div>
+
+
 
 ## Results
+
+<div class="collage">
+  <div class="row" align="center">
+    <img src="docs/images/0001_solved_env.gif" width="30%">
+    <img src="docs/images/0002_solved_env.gif" width="30%">
+    <img src="docs/images/0003_solved_env.gif" width="30%">
+  </div>
+  <div class="row" align="center">
+    <img src="docs/images/0004_solved_env.gif" width="30%">
+    <img src="docs/images/0005_solved_env.gif" width="30%">
+    <img src="docs/images/0006_solved_env.gif" width="30%">
+  </div>
+</div>
+
+<br/>
