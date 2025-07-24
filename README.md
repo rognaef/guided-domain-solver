@@ -26,9 +26,13 @@
     <strong><a href="#results">Results</a></strong>
 </div>
 
+<br/>
+
 <div align="center">
     <img src="docs/images/method_overview.drawio.svg" width="98%">
 </div>
+
+<br/>
 
 ## Description
 
