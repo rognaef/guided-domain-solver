@@ -44,20 +44,60 @@
 
 ## Installation
 
-The Neo4J database can be specified as a .env file, which can be stored inside <a href="src/" target="_blank">src</a>, with the following contents:
+This guide walks you through setting up the environment required to run the repository. It covers setting up the project locally from its repository, along with installing and configuring a Neo4J database and an Ollama agent system.
+
+Make sure the following are installed on your system:
+
+- [Python 3.10](https://www.python.org/downloads/)
+- [Neo4J Desktop or Neo4J Aura](https://neo4j.com/download/)
+- [Ollama](https://ollama.com/)
+- [Git](https://git-scm.com/)
+
+### 1. Repository Setup
+
+Clone the repository and install the Python dependencies in a virtual environment:
+
+```bash
+git clone <copied URL>
+cd <new directory>
+
+# Create and activate a virtual environment
+python -m venv venv
+
+# For Windows
+venv\Scripts\activate.bat
+
+# For macOS/Linux
+# source venv/bin/activate
+
+# Install repository dependencies
+pip install -r requirements.txt
+```
+
+### 2. Neo4J Database
+
+Create an empty Neo4J database instance and ensure the [APOC plugin](https://neo4j.com/docs/apoc/current/installation/#apoc) is installed and activated.
+
+To connect the repository to your Neo4J instance, create a `.env` file inside the <a href="src/" target="_blank">`src/`</a> directory with the following content:
+
 ```
 NEO4J_URI = <URI for Neo4j database>
 NEO4J_USERNAME = <Username for Neo4j>
 NEO4J_PASSWORD = <Password for Neo4j>
 ```
 
-The Neo4J database must have installed the plugin APOC. (see <https://neo4j.com/docs/apoc/current/installation/#apoc>)
+Replace the values with the credentials for your Neo4J instance and make sure the database is running.
 
-Install requirements for python enviroment:
+### 3. Ollama Agent System
 
-```console
->pip install -r requirements.txt
+Pull the required model using Ollama:
+
+```bash
+ollama pull qwen3:8b
 ```
+
+This command downloads the qwen3:8b model, which the agent system will use during runtime.
+Make sure the Ollama service is running in the background.
 
 ## Examples
 
