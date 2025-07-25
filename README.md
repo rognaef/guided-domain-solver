@@ -101,6 +101,9 @@ Make sure the Ollama service is running in the background.
 
 ## Examples
 
+This example demonstrates how to solve the default Sokoban environment. 
+The MCTS algorithm is modular and allows you to plug in custom strategies for each phase of the search: selection, expansion, simulation, and backpropagation.
+
 ```python
 from mcts.mcts import Builder
 from mcts.selection import selection
@@ -109,21 +112,27 @@ from mcts.simulation import simulation
 from mcts.backprop import backprop
 from environment.environment import SokobanEnvImpl
 
+# Build the solver with custom strategies
 solver = (Builder()
           .setSelection(selection)
           .setExpansion(expansion)
           .setSimulation(simulation)
           .setBackprop(backprop)
           .build())
+# Initialize the default Sokoban environment
 env = SokobanEnvImpl(use_default_env=True)
+# Solve the environment and save logs to the specified path
 solver.solve(env, log_path="<Path>")
 ```
+
+The solved environment and detailed logs (including the solution) will be saved to the specified `<Path>`. 
+The algorithm solves the default Sokoban environment with the shortest trajectory of 30 moves:
 
 <div align="center">
     <img src="docs/images/0000_solved_env.gif" width="50%">
 </div>
 
-
+More examples can be found in the  <a href="docs/" target="_blank">`docs/`</a> directory.
 
 ## Results
 
