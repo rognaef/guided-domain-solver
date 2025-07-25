@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.4 Chrome/138.0.7204.97 Electron/37.2.1 Safari/537.36" version="28.0.4">
   <diagram name="Seite-1" id="Ul3aRqIEvuwvDgEJjYV_">
-    <mxGraphModel dx="21294" dy="9176" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="16384" dy="7174" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -271,7 +271,7 @@
         <mxCell id="oyaKjV_WXcEfCoysOoAM-215" value="&lt;font style=&quot;&quot;&gt;Environment&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=128;container=0;fontColor=#82B366;fontStyle=1" parent="oyaKjV_WXcEfCoysOoAM-320" vertex="1">
           <mxGeometry x="4830" y="382" width="1000" height="200" as="geometry" />
         </mxCell>
-        <mxCell id="oyaKjV_WXcEfCoysOoAM-216" value="&lt;font style=&quot;&quot;&gt;MCST&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=128;container=0;fontStyle=1;fontColor=#82B366;" parent="oyaKjV_WXcEfCoysOoAM-320" vertex="1">
+        <mxCell id="oyaKjV_WXcEfCoysOoAM-216" value="&lt;font style=&quot;&quot;&gt;MCTS&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=128;container=0;fontStyle=1;fontColor=#82B366;" parent="oyaKjV_WXcEfCoysOoAM-320" vertex="1">
           <mxGeometry x="3830" y="382" width="1000" height="200" as="geometry" />
         </mxCell>
         <mxCell id="oyaKjV_WXcEfCoysOoAM-164" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Helvetica;fontSize=18;fontColor=default;strokeWidth=8;fillColor=#f5f5f5;strokeColor=#666666;exitX=0.221;exitY=0.921;exitDx=0;exitDy=0;entryX=0.702;entryY=0.041;entryDx=0;entryDy=0;exitPerimeter=0;entryPerimeter=0;" parent="oyaKjV_WXcEfCoysOoAM-320" edge="1">
@@ -528,7 +528,7 @@
         <mxCell id="oyaKjV_WXcEfCoysOoAM-413" value="&lt;b&gt;V(s)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=128;fontColor=#333333;fillColor=none;strokeColor=none;" parent="oyaKjV_WXcEfCoysOoAM-320" vertex="1">
           <mxGeometry x="2180" y="1400" width="300" height="200" as="geometry" />
         </mxCell>
-        <mxCell id="oyaKjV_WXcEfCoysOoAM-321" value="&lt;font style=&quot;font-size: 160px;&quot;&gt;Monte Carlo Search Tree&lt;/font&gt;" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=200;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;strokeWidth=8;" parent="1" vertex="1">
+        <mxCell id="oyaKjV_WXcEfCoysOoAM-321" value="&lt;font style=&quot;font-size: 160px;&quot;&gt;Monte Carlo Tree&lt;/font&gt;&lt;span style=&quot;font-size: 160px;&quot;&gt;&amp;nbsp;Search&lt;/span&gt;" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=200;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;strokeWidth=8;" parent="1" vertex="1">
           <mxGeometry x="-830" y="-440" width="9860" height="3230" as="geometry" />
         </mxCell>
         <mxCell id="mhYo0zj6bfY33cigUTVe-19" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;strokeWidth=20;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
