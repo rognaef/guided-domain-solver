@@ -132,9 +132,15 @@ The algorithm solves the default Sokoban environment with the shortest trajector
     <img src="docs/images/0000_solved_env.gif" width="50%">
 </div>
 
-More examples can be found in the  <a href="docs/" target="_blank">`docs/`</a> directory.
+Unseen Sokoban enviroments can be generated with the following:
 
-## Results
+```python
+# Generate new Sokoban environment, which resets to starting point
+env = SokobanEnvImpl(max_steps=60).as_fixated()
+```
+
+The algorithm finds the shortest possible trajectory to solve the Sokoban enviroment.
+Below are some generated Sokoban environments that have been solved optimally:
 
 <div class="collage">
   <div class="row" align="center">
@@ -149,4 +155,6 @@ More examples can be found in the  <a href="docs/" target="_blank">`docs/`</a> d
   </div>
 </div>
 
-<br/>
+More examples can be found in the  <a href="docs/" target="_blank">`docs/`</a> directory.
+
+## Results
