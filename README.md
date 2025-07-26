@@ -38,11 +38,53 @@
 
 ## Description
 
+The algorithm is based on a Monte Carlo Tree Search (MCTS) to find a solution for the Sokoban game. It involves the steps of selection, expansion, simulation, and backpropagation, which are repeated several times. The resulting search tree is stored in the knowledge graph. The individual steps are described in the following chapters.
 
-### Knowledge Graph
+### Selection
+
+During the selection phase of MCTS, the algorithm traverses the current search tree to identify the most promising node for further investigation. Normally, an upper confidence bound for trees  (UCT) is used to find a balance between exploitation and exploration. In the first step of the Sokoban game, only exploitation is used here, as it is a relatively small domain. Thus, the most promising node that still contains unexplored actions is selected.
+
+Once the node has been selected, the knowledge graph is updated with the current game status. The game is divided into static, dynamic, and action layers. The nodes of the static layer are set at the beginning and do not change during the game. All moving objects are mapped in the dynamic layer. The action layer determines the possible actions that can be performed in the current status.
+
+
 <div align="center">
-    <img src="docs/images/KG_Environment.drawio.svg" width="60%">
+    <img src="docs/images/KG_Environment.drawio.svg" width="50%">
 </div>
+
+The nodes of the floors contain the target positions of the boxes as properties. In the relations, the positions of the player and the boxes on the playing field are encoded. This allows effective queries to be performed to determine which box is closest to the player or which box can be placed the fastest.
+
+### Expansion
+
+In the expansion step, the search tree is extended with a new node. Multiple queries are made on the knowledge graph, which summarize the current state of the game and game states that have already been reached. With this information, an LLM agent is prompted to execute the next action in the game state:
+
+<pre style="white-space: pre; overflow-x: auto;">
+system:  You are a player which tries to solve a Sokoban game. 
+         Keep the reasoning short. 
+         Respond only with a single action out of ['UP', 'DOWN', 'LEFT', 'RIGHT'].
+
+human :  Use the following results retrieved from a database to provide the next action for the Sokoban game.
+         Enviroment: {enviorment}
+         Shortest paths to place remaining boxes: {shortest_paths_to_place_remaining_boxes}
+         Attempted Actions: {attempted_actions}
+         Posstible Actions: {possible_actions}
+         Action:
+</pre>
+
+It would be possible to implement an agent system that independently executes queries on the knowledge graph. Since the Sokoban game keeps a similar structure, using pre-made cyper queries is more reliable.
+
+### Simulation
+
+In the simulation phase, the result of the newly added node is evaluated by simulating a trajectory from this point to a final state using an efficient policy. Normally, a ratio of games won/lost is used to determine the value of the game state. Since the Sokoban game has a very sparse distribution of games won, finding a solution using this method can take considerably longer. Here, it is possible to take advantage of the fact that the possible game states of Sokoban are finite. Therefore, the remaining steps to solve the game state are used as the value of the game state. This evaluation is determined using a breadth-first search, which represents an error-free evaluation of the game state and cannot be achieved in many other domains.
+
+### Backpropagation
+
+In the backpropagation step, the result of the simulation is propagated back through the search tree, updating the value estimates of each node along the path. In the case of the Sokoban game, the update rule of n-step temporal difference learning is applied here:
+
+$$
+V(s_t) \leftarrow V(s_t) + \alpha \left[ \sum_{k=0}^{n-1} \gamma^k r_{t+k+1} + \gamma^n V(s_{t+n}) - V(s_t) \right]
+$$
+
+The update is applied upwards on each node in the search tree. During the update, the number of steps in the temporal difference learning update rule depends on how deep the simulated node is in the search tree. The reward $r$ is the determined value of the simulation. The learning rate $\alpha$ and the discount factor $\gamma$ can be tuned.
 
 ## Installation
 
@@ -55,7 +97,7 @@ Make sure the following are installed on your system:
 - [Ollama](https://ollama.com/)
 - [Git](https://git-scm.com/)
 
-### 1. Repository Setup
+### Repository Setup
 
 Clone the repository and install the Python dependencies in a virtual environment:
 
@@ -76,7 +118,7 @@ venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
-### 2. Neo4J Database
+### Neo4J Database
 
 Create an empty Neo4J database instance and ensure the [APOC plugin](https://neo4j.com/docs/apoc/current/installation/#apoc) is installed and activated.
 
@@ -90,7 +132,7 @@ NEO4J_PASSWORD = <Password for Neo4j>
 
 Replace the values with the credentials for your Neo4J instance and make sure the database is running.
 
-### 3. Ollama Agent System
+### Ollama Agent System
 
 Pull the required model using Ollama:
 
