@@ -202,3 +202,13 @@ Below are some generated Sokoban environments that have been solved optimally:
 More examples can be found in the  <a href="docs/" target="_blank">`docs/`</a> directory.
 
 ## Results
+
+For the Sokoban game, solutions will be achieved that need the same number of steps to solve the game as the optimal solution. This is made possible by the optimal function within the simulation step.
+
+Various approaches were tried for the expansion step. One was expansion with a random possible action. In comparison, random sampling takes a random action from the shortest paths to place the unplaced boxes. And the approach with the LLM agent, which receives all the information about the environment as well as the shortest paths to place the unplaced boxes. The LLM agent is qwen3:8b, which is a relatively small LLM.
+
+<div align="center">
+    <img src="docs/images/expansion_efficiency.svg" width="50%">
+</div>
+
+The plot shows a comparison of the different variants in a greedy selection scenario. A error-free expansion would generate a branching factor of 1, since in this case the best action is always taken. It can be seen that the LLM agent is able to make better decisions than the other variants. However, it requires significantly more time for evaluation and reasoning.
