@@ -4,7 +4,7 @@
 
 <div align="center">
     <em>
-    This project presents a method to solve domain-specific problems by leveraging Monte Carlo Tree Search (MCTS), Knowledge Graphs and Large Language Model (LLM) agents. At the core of this approach lies a MCTS algorithm, which explores the complex solution space of a given domain in a goal-directed and sample-efficient manner. In the expansion phase of the MCTS, a domain-specific knowledge graph is incorporated to encode concepts, relationships and constraints. This structured representation enables an LLM agent to make informed decisions for the node expansion. By combining a structured search of the solution space through MCTS, a representation of domain knowledge through the knowledge graph and the generalization abilities of an LLM agent, this method can solve complex tasks in domains where both creativity and adherence to expert rules are essential. In a first step, this approach is used to solve Sokoban, a puzzle game that requires planning and creativity to place several boxes at specific targets with as few moves as possible.
+    This project presents a method to solve domain-specific problems by leveraging Monte Carlo Tree Search (MCTS), Knowledge Graphs and Large Language Model (LLM) agents. At the core of this approach lies a MCTS algorithm that explores the complex solution space of a given domain in a goal-directed and sample-efficient manner. In the expansion phase of the MCTS, a domain-specific knowledge graph is incorporated to encode concepts, relationships and constraints. This structured representation enables an LLM agent to make informed decisions for the node expansion. By combining a structured search of the solution space through MCTS, a representation of domain knowledge through the Knowledge Graph and the generalization abilities of an LLM agent, this method can solve complex tasks in domains where both creativity and adherence to expert rules are essential. In a first step, this approach is used to solve Sokoban, a puzzle game that requires planning and creativity to place several boxes at specific targets with as few moves as possible.
     </em>
 </div>
 
@@ -38,13 +38,13 @@
 
 ## Description
 
-The algorithm is based on a Monte Carlo Tree Search (MCTS) to find a solution for the Sokoban game. It involves the steps of selection, expansion, simulation, and backpropagation, which are repeated several times. The resulting search tree is stored in the knowledge graph. The individual steps are described in the following chapters.
+The algorithm is based on a Monte Carlo Tree Search (MCTS) to find a solution for the Sokoban game. It involves the steps of selection, expansion, simulation, and backpropagation, which are repeated several times. The resulting search tree is stored in the Knowledge Graph. The individual steps are described in the following chapters.
 
 ### Selection
 
-During the selection phase of MCTS, the algorithm traverses the current search tree to identify the most promising node for further investigation. Normally, an upper confidence bound for trees  (UCT) is used to find a balance between exploitation and exploration. In the first step of the Sokoban game, only exploitation is used here, as it is a relatively small domain. Thus, the most promising node that still contains unexplored actions is selected.
+During the selection phase of MCTS, the algorithm traverses the current search tree to identify the most promising node for further investigation. Normally, an upper confidence bound for trees is used to find a balance between exploitation and exploration. In the first step of the Sokoban game, only exploitation is used here, as it is a relatively small domain. Thus, the most promising node that still contains unexplored actions is selected.
 
-Once the node has been selected, the knowledge graph is updated with the current game status. The game is divided into static, dynamic, and action layers. The nodes of the static layer are set at the beginning and do not change during the game. All moving objects are mapped in the dynamic layer. The action layer determines the possible actions that can be performed in the current status.
+Once the node has been selected, the Knowledge Graph is updated with the current game status. The game is divided into static, dynamic, and action layers. The nodes of the static layer are set at the beginning and do not change during the game. All moving objects are mapped in the dynamic layer. The action layer determines the possible actions that can be performed in the current status.
 
 
 <div align="center">
@@ -55,7 +55,7 @@ The nodes of the floors contain the target positions of the boxes as properties.
 
 ### Expansion
 
-In the expansion step, the search tree is extended with a new node. Multiple queries are made on the knowledge graph, which summarize the current state of the game and game states that have already been reached. With this information, an LLM agent is prompted to execute the next action in the game state:
+In the expansion step, the search tree is extended with a new node. Multiple queries are made on the Knowledge Graph, which summarize the current state of the game and game states that have already been reached. With this information, an LLM agent is prompted to execute the next action in the game state:
 
 <pre style="white-space: pre; overflow-x: auto;">
 system:  You are a player which tries to solve a Sokoban game. 
@@ -63,14 +63,14 @@ system:  You are a player which tries to solve a Sokoban game.
          Respond only with a single action out of ['UP', 'DOWN', 'LEFT', 'RIGHT'].
 
 human :  Use the following results retrieved from a database to provide the next action for the Sokoban game.
-         Enviroment: {enviorment}
+         Environment: {environment}
          Shortest paths to place remaining boxes: {shortest_paths_to_place_remaining_boxes}
          Attempted Actions: {attempted_actions}
-         Posstible Actions: {possible_actions}
+         Possible Actions: {possible_actions}
          Action:
 </pre>
 
-It would be possible to implement an agent system that independently executes queries on the knowledge graph. Since the Sokoban game keeps a similar structure, using pre-made cyper queries is more reliable.
+It would be possible to implement an agent system that independently executes queries on the Knowledge Graph. Since the Sokoban game keeps a similar structure, using pre-made cypher queries is more reliable.
 
 ### Simulation
 
@@ -140,7 +140,7 @@ Pull the required model using Ollama:
 ollama pull qwen3:8b
 ```
 
-This command downloads the qwen3:8b model, which the agent system will use during runtime.
+This command downloads the qwen3:8b model that the agent system will use during runtime.
 Make sure the Ollama service is running in the background.
 
 ## Examples
@@ -179,7 +179,7 @@ The algorithm solves the default Sokoban environment with the shortest trajector
 Unseen Sokoban enviroments can be generated with the following:
 
 ```python
-# Generate new Sokoban environment, which resets to starting point
+# Generate new Sokoban environment that resets to starting point
 env = SokobanEnvImpl(max_steps=60).as_fixated()
 ```
 
@@ -205,10 +205,10 @@ More examples can be found in the  <a href="docs/" target="_blank">`docs/`</a> d
 
 For the Sokoban game, solutions will be achieved that need the same number of steps to solve the game as the optimal solution. This is made possible by the optimal function within the simulation step.
 
-Various approaches were tried for the expansion step. One was expansion with a random possible action. In comparison, random sampling takes a random action from the shortest paths to place the unplaced boxes. And the approach with the LLM agent, which receives all the information about the environment as well as the shortest paths to place the unplaced boxes. The LLM agent is qwen3:8b, which is a relatively small LLM.
+Various approaches were tried for the expansion step. One was expansion with a random possible action. In comparison, random sampling takes a random action from the shortest paths to place the unplaced boxes. The final approach was to use an LLM agent that receives all the information about the environment as well as the shortest paths to place the unplaced boxes. The LLM agent is qwen3:8b, a relatively small LLM.
 
 <div align="center">
     <img src="docs/images/expansion_efficiency.svg" width="50%">
 </div>
 
-The plot shows a comparison of the different variants in a greedy selection scenario. A error-free expansion would generate a branching factor of 1, since in this case the best action is always taken. It can be seen that the LLM agent is able to make better decisions than the other variants. However, it requires significantly more time for evaluation and reasoning.
+The plot shows a comparison of the different variants in a greedy selection scenario. An error-free expansion would generate a branching factor of 1, which means that the best action is always taken. It can be seen that the LLM agent is able to make better decisions than the other variants. However, it requires significantly more time for evaluation and reasoning.
