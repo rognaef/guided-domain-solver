@@ -1,6 +1,6 @@
 ============================= test session starts =============================
 platform win32 -- Python 3.10.0, pytest-8.3.5, pluggy-1.5.0
-rootdir: C:\Users\roger\Documents\Projekte\guided-domain-solver
+rootdir: C:\Users\roger.naef\Documents\guided-domain-solver
 plugins: anyio-4.9.0, langsmith-0.4.4, cov-6.1.1
 collected 41 items
 
@@ -37,4 +37,4 @@ mcts\simulation.py                        12      0   100%
 mcts\state.py                             26      0   100%
 ----------------------------------------------------------
 TOTAL                                    717      5    99%
-======================= 41 passed in 443.92s (0:07:23) ========================
+======================= 41 passed in 124.22s (0:02:04) ========================
