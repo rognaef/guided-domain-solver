@@ -48,7 +48,7 @@ Once the node has been selected, the Knowledge Graph is updated with the current
 
 
 <div align="center">
-    <img src="docs/images/KG_Environment.drawio.svg" width="50%">
+    <img src="docs/images/KG_Environment.svg" width="50%">
 </div>
 
 The nodes of the floors contain the target positions of the boxes as properties. In the relations, the positions of the player and the boxes on the playing field are encoded. This allows effective queries to be performed to determine which box is closest to the player or which box can be placed the fastest.
