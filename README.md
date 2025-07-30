@@ -31,7 +31,7 @@
 <br/>
 
 <div align="center">
-    <img src="docs/images/method_overview.drawio.svg" width="98%">
+    <img src="docs/images/method_overview.svg" width="98%">
 </div>
 
 <br/>
