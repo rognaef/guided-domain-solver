@@ -1,19 +1,8 @@
 from environment.const import *
 from environment.util import find_shortest_paths_to_place_remaining_boxes
-from agents.agent_ollama import AgentOllama
 import random
 import ast
 from mcts.state import OverallState, GlobalState
-
-agent_player = AgentOllama("qwen3:8b",
-[("system","You are a player which tries to solve a Sokoban game. Keep the reasoning short. Respond only with a single action out of ['UP', 'DOWN', 'LEFT', 'RIGHT'].",),
-("human",("""Use the following results retrieved from a database to provide the next action for the Sokoban game.
-Environment: {environment}
-Shortest paths to place remaining boxes: {shortest_paths_to_place_remaining_boxes}
-Attempted Actions: {attempted_actions}
-Possible Actions: {possible_actions}
-Action: """),),],
-extract_reasoning=True)
 
 def expansion(state: OverallState) -> OverallState:
      id = state.get("selection_id")
@@ -55,7 +44,7 @@ def expansion(state: OverallState) -> OverallState:
      possible_actions = [caption_action_dict.get(record["possible_actions"].upper()) for record in records]
      
      # agent
-     next_step = agent_player.invoke(
+     next_step = GlobalState().agent_player.invoke(
         {"environment": environment,
          "shortest_paths_to_place_remaining_boxes": shortest_paths_to_place_remaining_boxes,
          "attempted_actions": attempted_actions,

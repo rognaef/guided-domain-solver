@@ -21,6 +21,20 @@ def test_solve():
     trajectory, num_explored_nodes, needed_time = testee.solve(env)
     assert len(trajectory) == 1
 
+def test_solve_other_model():
+    testee = Builder().build()
+    env = SokobanEnvImpl(fixated_env=(
+        np.array([[0, 0, 0, 0, 0],
+                  [0, 2, 1, 1, 0],
+                  [0, 0, 0, 0, 0]]),
+        np.array([[0, 0, 0, 0, 0],
+                  [0, 2, 4, 5, 0],
+                  [0, 0, 0, 0, 0]]),
+        {(1, 1): (2, 1)}
+    ))
+    trajectory, num_explored_nodes, needed_time = testee.solve(env, agent_player_model="qwen3:32b")
+    assert len(trajectory) == 1
+
 def test_solve_multiple():
     testee = Builder().build()
     env_01 = SokobanEnvImpl(fixated_env=(
