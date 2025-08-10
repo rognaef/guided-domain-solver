@@ -78,13 +78,15 @@ In the simulation phase, the result of the newly added node is evaluated by simu
 
 ### Backpropagation
 
-In the backpropagation step, the result of the simulation is propagated back through the search tree, updating the value estimates of each node along the path. In the case of the Sokoban game, the update rule of n-step temporal difference learning is applied here:
+In the backpropagation step, the result of the simulation is propagated back through the search tree, updating the value estimates of each node along the path. In the case of the Sokoban game, the following update rule is applied here:
 
 $$
-V(s_t) \leftarrow V(s_t) + \alpha \left[ \sum_{k=0}^{n-1} \gamma^k r_{t+k+1} + \gamma^n V(s_{t+n}) - V(s_t) \right]
+V(s_t) \leftarrow V(s_t) + \alpha\gamma^n V(s_{t+n})
 $$
 
-The update is applied upwards on each node in the search tree. During the update, the number of steps in the temporal difference learning update rule depends on how deep the simulated node is in the search tree. The reward $r$ is the determined value of the simulation. The learning rate $\alpha$ and the discount factor $\gamma$ can be tuned.
+It gets applied upwards on each node in the search tree to determine the new value of the game state $V(s_t)$. 
+During the update, the number of steps n in the update rule depends on how deep the simulated node is in the search tree. 
+The learning rate $\alpha$ and the discount factor $\gamma$ can be tuned.
 
 ## Installation
 
