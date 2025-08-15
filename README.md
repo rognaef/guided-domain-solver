@@ -208,10 +208,10 @@ More examples can be found in the  <a href="docs/" target="_blank">`docs/`</a> d
 
 For the Sokoban game, solutions will be achieved that need the same number of steps to solve the game as the optimal solution. This is made possible by the optimal function within the simulation step.
 
-Various approaches were tried for the expansion step. One was expansion with a random possible action. In comparison, random sampling takes a random action from the shortest paths to place the unplaced boxes. The final approach was to use an LLM agent that receives all the information about the environment as well as the shortest paths to place the unplaced boxes. The LLM agent is qwen3:8b, a relatively small LLM.
+Various approaches were tried for the expansion step. One was expansion with a random possible action. In comparison, random sampling takes a random action from the shortest paths to place the unplaced boxes. The final approach was to use LLM agents that receives all the information about the environment as well as the shortest paths to place the unplaced boxes. The tested LLM agents are GPT-OSS:120b, Deepseek-R1:70b and Qwen3:32b.
 
 <div align="center">
     <img src="docs/images/expansion_efficiency_boxplot.svg" width="70%">
 </div>
 
-The plot shows a comparison of the different variants in a greedy selection scenario. An error-free expansion would generate a branching factor of 1, which means that the best action is always taken. It can be seen that the LLM agent is able to make better decisions than the other variants. However, it requires significantly more time for evaluation and reasoning.
+The plot shows a comparison of the different variants in a greedy selection scenario. An error-free expansion would generate a branching factor of 1, which means that the best action is always taken. It can be seen that all LLM agents are able to make better decisions than the other variants. However, it requires significantly more time for evaluation and reasoning.
