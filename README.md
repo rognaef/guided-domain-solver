@@ -14,6 +14,7 @@
 <a href="https://www.python.org/doc/versions/" target="_blank"><img src="https://img.shields.io/badge/Python-3.10-color=%2334D058.svg" alt="Supported Python versions"></a>
 <a href="tests/coverage.txt" target="_blank"><img src="https://img.shields.io/badge/Tests-passing-color=%2334D058.svg" alt="Tests"></a>
 <a href="tests/coverage.txt" target="_blank"><img src="https://img.shields.io/badge/Coverage-99%25-color=%2334D058.svg" alt="Coverage"></a>
+<a href="https://arxiv.org/" target="_blank"><img src="https://img.shields.io/badge/arXiv-pending-b31b1b.svg" alt="arXiv"></a>
 </div>
 
 <br/>
@@ -58,7 +59,7 @@ The nodes of the floors contain the target positions of the boxes as properties.
 In the expansion step, the search tree is extended with a new node. Multiple queries are made on the Knowledge Graph, which summarize the current state of the game and game states that have already been reached. With this information, an LLM agent is prompted to execute the next action in the game state:
 
 <pre style="white-space: pre; overflow-x: auto;">
-system:  You are a player which tries to solve a Sokoban game. 
+system:  You are a player who tries to solve a Sokoban game. 
          Keep the reasoning short. 
          Respond only with a single action out of ['UP', 'DOWN', 'LEFT', 'RIGHT'].
 
